@@ -34,3 +34,17 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 writable/session/*
 !writable/session/.gitkeep
 
+
+# Screenshots and test files
+*.png
+*.jpg
+*.jpeg
+
+# Upload directory
+/assets/upload/
+
+# Session files
+/writable/session/
+
+# XAMPP
+.DS_Store

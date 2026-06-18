@@ -1,5 +1,5 @@
             </main>
-            <footer class="bg-white border-t border-coklat-muda/30 px-6 py-4 text-center text-sm text-gray-500">
+            <footer class="bg-white border-t border-gray-200 px-6 py-3 text-center text-xs text-gray-400">
                 &copy; <?php echo date('Y'); ?> NINGNONG Kue Basah - Admin Panel
             </footer>
         </div>
