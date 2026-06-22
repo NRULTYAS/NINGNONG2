@@ -73,6 +73,7 @@ $jumlah_keranjang = isset($jumlah_keranjang) ? $jumlah_keranjang : 0;
                 <div class="hidden md:flex items-center gap-8">
                     <a href="<?php echo base_url('home'); ?>" class="nav-link text-gray-600 hover:text-coklat-tua font-medium transition text-sm">Beranda</a>
                     <a href="<?php echo base_url('produk'); ?>" class="nav-link text-gray-600 hover:text-coklat-tua font-medium transition text-sm">Produk</a>
+                    <a href="<?php echo base_url('catering'); ?>" class="nav-link text-gray-600 hover:text-coklat-tua font-medium transition text-sm">Catering</a>
                     <?php if($id_user): ?>
                     <a href="<?php echo base_url('riwayat'); ?>" class="nav-link text-gray-600 hover:text-coklat-tua font-medium transition text-sm">Riwayat</a>
                     <?php endif; ?>

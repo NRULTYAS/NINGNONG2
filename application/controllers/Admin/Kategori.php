@@ -23,14 +23,15 @@ class Kategori extends CI_Controller {
 
     public function tambah()
     {
-        $this->form_validation->set_rules('nama_kategori', 'Nama Kategori', 'required');
+        $this->form_validation->set_rules('nama_kategori', 'Nama Kategori', 'required|is_unique[tbl_kategori.nama_kategori]');
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('admin/kategori_tambah');
         } else {
             $data = [
                 'nama_kategori' => $this->input->post('nama_kategori', TRUE),
-                'deskripsi' => $this->input->post('deskripsi', TRUE)
+                'deskripsi' => $this->input->post('deskripsi', TRUE),
+                'status' => $this->input->post('status', TRUE)
             ];
             $this->kategori_model->insert($data);
             $this->session->set_flashdata('success', 'Kategori berhasil ditambahkan');
@@ -48,9 +49,18 @@ class Kategori extends CI_Controller {
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('admin/kategori_edit', $data);
         } else {
+            // Cek duplikat nama (kecuali dirinya sendiri)
+            $nama = $this->input->post('nama_kategori', TRUE);
+            $existing = $this->kategori_model->get_by_nama($nama);
+            if ($existing && $existing->id_kategori != $id) {
+                $this->session->set_flashdata('error', 'Nama kategori sudah digunakan');
+                redirect('admin/kategori/edit/'.$id);
+            }
+
             $update = [
                 'nama_kategori' => $this->input->post('nama_kategori', TRUE),
-                'deskripsi' => $this->input->post('deskripsi', TRUE)
+                'deskripsi' => $this->input->post('deskripsi', TRUE),
+                'status' => $this->input->post('status', TRUE)
             ];
             $this->kategori_model->update($id, $update);
             $this->session->set_flashdata('success', 'Kategori berhasil diupdate');

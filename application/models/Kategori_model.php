@@ -33,4 +33,18 @@ class Kategori_model extends CI_Model {
     public function count_all() {
         return $this->db->count_all($this->table);
     }
+
+    public function get_active() {
+        // Cek apakah kolom status ada (untuk kompatibilitas sebelum migration)
+        $columns = $this->db->list_fields($this->table);
+        if (in_array('status', $columns)) {
+            return $this->db->get_where($this->table, ['status' => 'aktif'])->result();
+        }
+        // Fallback: ambil semua jika kolom status belum ada
+        return $this->db->get($this->table)->result();
+    }
+
+    public function get_by_nama($nama) {
+        return $this->db->get_where($this->table, ['nama_kategori' => $nama])->row();
+    }
 }

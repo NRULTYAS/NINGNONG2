@@ -51,7 +51,11 @@
                 <h2 class="text-2xl font-bold text-coklat-tua mb-1">Daftar Akun</h2>
                 <p class="text-gray-500 text-sm">Buat akun baru Anda</p>
             </div>
-            <?php echo validation_errors('<div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm">', '</div>'); ?>
+            <?php if (!empty($error_message)): ?>
+                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm">
+                    <?php echo $error_message; ?>
+                </div>
+            <?php endif; ?>
             <form action="<?php echo base_url('auth/proses_register'); ?>" method="post">
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
@@ -74,13 +78,15 @@
                         <input type="text" name="no_hp" required class="w-full pl-11 pr-4 py-3 rounded-xl border border-coklat-muda/30 focus:outline-none focus:border-coklat-tua focus:ring-2 focus:ring-coklat-tua/10 bg-krem/30 transition" placeholder="0812xxxxxxx">
                     </div>
                 </div>
-                <div class="mb-6">
+                <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
                     <div class="relative">
                         <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-lock"></i></div>
                         <input type="password" name="password" required class="w-full pl-11 pr-4 py-3 rounded-xl border border-coklat-muda/30 focus:outline-none focus:border-coklat-tua focus:ring-2 focus:ring-coklat-tua/10 bg-krem/30 transition" placeholder="••••••••">
                     </div>
                 </div>
+
+
                 <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-coklat-tua to-coklat text-white rounded-xl font-medium hover:shadow-xl hover:shadow-coklat-tua/25 transition flex items-center justify-center gap-2">
                     <i class="fas fa-user-plus text-sm"></i> Daftar
                 </button>

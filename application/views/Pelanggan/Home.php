@@ -23,10 +23,40 @@
                 </h1>
                 <p class="text-gray-500 text-lg mb-8 leading-relaxed max-w-lg">Dibuat dengan resep turun-temurun menggunakan bahan-bahan pilihan berkualitas tinggi. Rasakan kelezatan yang tak terlupakan.</p>
                 <div class="flex flex-wrap gap-4">
-                    <a href="<?php echo base_url('produk'); ?>" class="group px-8 py-3.5 bg-gradient-to-r from-coklat-tua to-coklat text-white rounded-xl font-medium hover:shadow-xl hover:shadow-coklat-tua/25 transition flex items-center gap-2">
-                        Lihat Produk <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
-                    </a>
-                    <a href="<?php echo base_url('auth/register'); ?>" class="px-8 py-3.5 border-2 border-coklat-tua/30 text-coklat-tua rounded-xl font-medium hover:bg-coklat-tua hover:text-white hover:border-coklat-tua transition">Daftar Sekarang</a>
+                    <?php
+                        $id_user = $this->session->userdata('id_user');
+                        $role = $this->session->userdata('role');
+
+                        if (empty($id_user) || empty($role)) {
+                    ?>
+                        <a href="<?php echo base_url('produk'); ?>" class="group px-8 py-3.5 bg-gradient-to-r from-coklat-tua to-coklat text-white rounded-xl font-medium hover:shadow-xl hover:shadow-coklat-tua/25 transition flex items-center gap-2">
+                            Lihat Produk <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="<?php echo base_url('auth/register'); ?>" class="px-8 py-3.5 border-2 border-coklat-tua/30 text-coklat-tua rounded-xl font-medium hover:bg-coklat-tua hover:text-white hover:border-coklat-tua transition">Daftar Sekarang</a>
+                        <a href="<?php echo base_url('auth/login'); ?>" class="px-8 py-3.5 border-2 border-coklat-tua/30 text-coklat-tua rounded-xl font-medium hover:bg-coklat-tua hover:text-white hover:border-coklat-tua transition">Masuk</a>
+                    <?php
+                        } elseif ($role === 'pelanggan') {
+                    ?>
+                        <a href="<?php echo base_url('produk'); ?>" class="group px-8 py-3.5 bg-gradient-to-r from-coklat-tua to-coklat text-white rounded-xl font-medium hover:shadow-xl hover:shadow-coklat-tua/25 transition flex items-center gap-2">
+                            Belanja Sekarang <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="<?php echo base_url('pesanan/pilih_jenis'); ?>" class="px-8 py-3.5 border-2 border-coklat-tua/30 text-coklat-tua rounded-xl font-medium hover:bg-coklat-tua hover:text-white hover:border-coklat-tua transition">Pesan Sekarang</a>
+                    <?php
+                        } elseif ($role === 'admin') {
+                    ?>
+                        <a href="<?php echo base_url('admin/dashboard'); ?>" class="group px-8 py-3.5 bg-gradient-to-r from-coklat-tua to-coklat text-white rounded-xl font-medium hover:shadow-xl hover:shadow-coklat-tua/25 transition flex items-center gap-2">
+                            Dashboard Admin <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="<?php echo base_url('admin/produk'); ?>" class="px-8 py-3.5 border-2 border-coklat-tua/30 text-coklat-tua rounded-xl font-medium hover:bg-coklat-tua hover:text-white hover:border-coklat-tua transition">Kelola Produk</a>
+                    <?php
+                        } else {
+                            // fallback jika role tidak dikenali: tampilkan tombol daftar
+                    ?>
+                        <a href="<?php echo base_url('produk'); ?>" class="group px-8 py-3.5 bg-gradient-to-r from-coklat-tua to-coklat text-white rounded-xl font-medium hover:shadow-xl hover:shadow-coklat-tua/25 transition flex items-center gap-2">
+                            Lihat Produk <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="<?php echo base_url('auth/register'); ?>" class="px-8 py-3.5 border-2 border-coklat-tua/30 text-coklat-tua rounded-xl font-medium hover:bg-coklat-tua hover:text-white hover:border-coklat-tua transition">Daftar Sekarang</a>
+                    <?php } ?>
                 </div>
                 <!-- Stats -->
                 <div class="flex gap-8 mt-10">

@@ -46,4 +46,28 @@ class Produk extends CI_Controller {
         
         $this->load->view('pelanggan/detail_produk', $data);
     }
+
+    public function pesan($id)
+    {
+        $produk = $this->produk_model->get_by_id($id);
+        if (!$produk) {
+            $this->session->set_flashdata('error', 'Produk tidak ditemukan');
+            redirect('produk');
+        }
+
+        if ($produk->stok < 1) {
+            $this->session->set_flashdata('error', 'Stok habis');
+            redirect('produk');
+        }
+
+        $this->session->set_userdata('selected_order', [
+            'type' => 'pesan_satuan',
+            'id_produk' => $produk->id_produk,
+            'nama_produk' => $produk->nama_produk,
+            'harga' => (int)$produk->harga,
+            'jumlah' => 1
+        ]);
+
+        redirect('checkout_umum');
+    }
 }

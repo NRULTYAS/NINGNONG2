@@ -58,4 +58,18 @@ class Produk_model extends CI_Model {
         $this->db->limit($limit);
         return $this->db->get($this->table)->result();
     }
+
+    public function get_snack_box($limit = null, $offset = null) {
+        $this->db->join('tbl_kategori', 'tbl_kategori.id_kategori = tbl_produk.id_kategori');
+        $this->db->where('tbl_produk.snack_box', 1);
+        if ($limit) $this->db->limit($limit, $offset);
+        return $this->db->get($this->table)->result();
+    }
+
+    public function get_snack_box_by_kategori($id_kategori) {
+        $this->db->join('tbl_kategori', 'tbl_kategori.id_kategori = tbl_produk.id_kategori');
+        $this->db->where('tbl_produk.snack_box', 1);
+        $this->db->where('tbl_produk.id_kategori', $id_kategori);
+        return $this->db->get($this->table)->result();
+    }
 }

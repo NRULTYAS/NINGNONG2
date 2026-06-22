@@ -88,22 +88,24 @@ class Checkout extends CI_Controller {
         $this->keranjang_model->delete_by_user($id_user);
 
         // Buat pesan WhatsApp
+        $kode_pesanan = 'NN-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -4));
         $pesan = "Halo NINGNONG Kue Basah,%0A%0A";
-        $pesan .= "Saya ingin konfirmasi pesanan dengan kode: *" . $kode_pesanan . "* %0A%0A";
+        $pesan .= "Saya ingin konfirmasi pesanan *Pesan Satuan* dengan kode: *" . $kode_pesanan . "*%0A%0A";
         $pesan .= "*Detail Pesanan:*%0A";
-        $no = 1;
+        $total_items = 0;
         foreach ($items as $item) {
-            $pesan .= $no++ . ". " . $item->nama_produk . " - " . $item->jumlah . " x Rp " . number_format($item->harga, 0, ',', '.') . " = Rp " . number_format($item->harga * $item->jumlah, 0, ',', '.') . "%0A";
+            $pesan .= "  • {$item->nama_produk} x{$item->jumlah} = Rp " . number_format($item->harga * $item->jumlah, 0, ',', '.') . "%0A";
+            $total_items += $item->jumlah;
         }
-        $pesan .= "%0A*Total: Rp " . number_format($total, 0, ',', '.') . "*%0A";
-        $pesan .= "Metode Pembayaran: " . ucfirst($metode) . "%0A%0A";
+        $pesan .= "%0A*Harga per item: Rp " . number_format($total / max($total_items, 1), 0, ',', '.') . "*%0A";
+        $pesan .= "*Jumlah: " . $total_items . " item*%0A";
+        $pesan .= "*Total Pembayaran: Rp " . number_format($total, 0, ',', '.') . "*%0A";
+        $pesan .= "Metode Pembayaran: " . ucfirst($metode) . "%0A";
+        $pesan .= "Tanggal Kirim: " . date('d/m/Y', strtotime($this->input->post('tanggal_kirim', TRUE))) . "%0A%0A";
         $pesan .= "*Data Pengiriman:*%0A";
         $pesan .= "Nama: " . $nama_penerima . "%0A";
         $pesan .= "No HP: " . $no_hp . "%0A";
         $pesan .= "Alamat: " . $alamat . "%0A";
-        if ($catatan) {
-            $pesan .= "Catatan: " . $catatan . "%0A";
-        }
         $pesan .= "%0ATerima kasih!";
 
         $this->session->set_flashdata('success', 'Pesanan berhasil dibuat! Mengarahkan ke WhatsApp penjual...');

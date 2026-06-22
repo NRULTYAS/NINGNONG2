@@ -63,6 +63,10 @@ if($role != 'admin') redirect('auth/login');
                 <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0"><i class="fas fa-chart-pie text-xs"></i></div>
                 <span>Dashboard</span>
             </a>
+            <a href="<?php echo base_url('admin/catering'); ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition text-sm <?php echo $this->uri->segment(2) == 'catering' ? 'bg-white/15 font-medium' : 'text-white/80'; ?>">
+                <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0"><i class="fas fa-box-open text-xs"></i></div>
+                <span>Catering</span>
+            </a>
             <a href="<?php echo base_url('admin/produk'); ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition text-sm <?php echo $this->uri->segment(2) == 'produk' ? 'bg-white/15 font-medium' : 'text-white/80'; ?>">
                 <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0"><i class="fas fa-cookie text-xs"></i></div>
                 <span>Produk</span>
@@ -105,7 +109,7 @@ if($role != 'admin') redirect('auth/login');
                 <h2 class="text-lg font-bold text-coklat-tua hidden sm:block">
                     <?php
                     $seg = $this->uri->segment(2);
-                    $titles = ['dashboard'=>'Dashboard','produk'=>'Kelola Produk','kategori'=>'Kelola Kategori','pesanan'=>'Kelola Pesanan','laporan'=>'Laporan Penjualan'];
+                    $titles = ['dashboard'=>'Dashboard','catering'=>'Kelola Catering','produk'=>'Kelola Produk','kategori'=>'Kelola Kategori','pesanan'=>'Kelola Pesanan','laporan'=>'Laporan Penjualan'];
                     echo isset($titles[$seg]) ? $titles[$seg] : 'Admin Panel';
                     ?>
                 </h2>

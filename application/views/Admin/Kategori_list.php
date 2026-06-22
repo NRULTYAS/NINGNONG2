@@ -23,6 +23,7 @@
                     <th class="px-6 py-4 font-semibold text-gray-700">ID</th>
                     <th class="px-6 py-4 font-semibold text-gray-700">Nama Kategori</th>
                     <th class="px-6 py-4 font-semibold text-gray-700">Deskripsi</th>
+                    <th class="px-6 py-4 font-semibold text-gray-700">Status</th>
                     <th class="px-6 py-4 font-semibold text-gray-700 text-right">Aksi</th>
                 </tr>
             </thead>
@@ -39,6 +40,17 @@
                         </div>
                     </td>
                     <td class="px-6 py-4 text-gray-600"><?php echo $k->deskripsi ?: '-'; ?></td>
+                    <td class="px-6 py-4">
+                        <?php if($k->status == 'aktif'): ?>
+                        <span class="inline-flex items-center px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
+                            <i class="fas fa-check-circle mr-1"></i> Aktif
+                        </span>
+                        <?php else: ?>
+                        <span class="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-xs font-semibold">
+                            <i class="fas fa-times-circle mr-1"></i> Nonaktif
+                        </span>
+                        <?php endif; ?>
+                    </td>
                     <td class="px-6 py-4 text-right">
                         <a href="<?php echo base_url('admin/kategori/edit/'.$k->id_kategori); ?>" class="inline-flex items-center justify-center w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-md hover:shadow-blue-500/30 hover:scale-105 transition-all mr-1"><i class="fas fa-edit text-sm"></i></a>
                         <a href="<?php echo base_url('admin/kategori/hapus/'.$k->id_kategori); ?>" onclick="return confirm('Yakin hapus kategori ini?')" class="inline-flex items-center justify-center w-9 h-9 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-lg hover:shadow-md hover:shadow-red-500/30 hover:scale-105 transition-all"><i class="fas fa-trash text-sm"></i></a>

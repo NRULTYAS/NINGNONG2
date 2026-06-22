@@ -21,12 +21,22 @@
                 </label>
                 <input type="text" name="nama_kategori" value="<?php echo $kategori->nama_kategori; ?>" required class="w-full px-4 py-3 rounded-xl border border-coklat-muda/30 focus:outline-none focus:border-coklat-tua focus:ring-2 focus:ring-coklat-tua/10 bg-white shadow-sm transition">
             </div>
-            <div class="mb-8">
+            <div class="mb-5">
                 <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                     <div class="w-6 h-6 rounded-lg bg-gradient-to-br from-purple-500 to-violet-500 flex items-center justify-center text-white text-xs"><i class="fas fa-align-left"></i></div>
                     Deskripsi
                 </label>
                 <textarea name="deskripsi" rows="3" class="w-full px-4 py-3 rounded-xl border border-coklat-muda/30 focus:outline-none focus:border-coklat-tua focus:ring-2 focus:ring-coklat-tua/10 bg-white shadow-sm transition resize-none"><?php echo $kategori->deskripsi; ?></textarea>
+            </div>
+            <div class="mb-8">
+                <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-lg bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white text-xs"><i class="fas fa-toggle-on"></i></div>
+                    Status
+                </label>
+                <select name="status" class="w-full px-4 py-3 rounded-xl border border-coklat-muda/30 focus:outline-none focus:border-coklat-tua focus:ring-2 focus:ring-coklat-tua/10 bg-white shadow-sm transition">
+                    <option value="aktif" <?php echo $kategori->status == 'aktif' ? 'selected' : ''; ?>>Aktif</option>
+                    <option value="nonaktif" <?php echo $kategori->status == 'nonaktif' ? 'selected' : ''; ?>>Nonaktif</option>
+                </select>
             </div>
             <div class="flex gap-3">
                 <button type="submit" class="px-8 py-3 bg-gradient-to-r from-coklat-tua to-coklat text-white rounded-xl font-semibold shadow-lg shadow-coklat-tua/25 hover:shadow-xl hover:shadow-coklat-tua/30 hover:scale-[1.02] transition-all flex items-center gap-2">
