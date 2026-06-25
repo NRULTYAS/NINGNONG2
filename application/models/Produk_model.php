@@ -9,6 +9,7 @@ class Produk_model extends CI_Model {
     }
 
     public function get_all($limit = null, $offset = null) {
+        $this->db->select('tbl_produk.*, tbl_kategori.nama_kategori');
         $this->db->join('tbl_kategori', 'tbl_kategori.id_kategori = tbl_produk.id_kategori', 'left');
         $this->db->where('tbl_produk.is_nyiru !=', 1);
         if ($limit) $this->db->limit($limit, $offset);
@@ -16,6 +17,7 @@ class Produk_model extends CI_Model {
     }
 
     public function get_by_id($id) {
+        $this->db->select('tbl_produk.*, tbl_kategori.nama_kategori');
         $this->db->join('tbl_kategori', 'tbl_kategori.id_kategori = tbl_produk.id_kategori', 'left');
         return $this->db->get_where($this->table, ['id_produk' => $id])->row();
     }
@@ -40,6 +42,40 @@ class Produk_model extends CI_Model {
         }
         return $this->db->get($this->table)->result();
     }
+
+    public function search_paginated($keyword, $id_kategori = null, $limit = null, $offset = null) {
+        $this->db->join('tbl_kategori', 'tbl_kategori.id_kategori = tbl_produk.id_kategori', 'left');
+        $this->db->where('tbl_produk.is_nyiru !=', 1);
+        if ($keyword) {
+            $this->db->group_start();
+            $this->db->like('nama_produk', $keyword);
+            $this->db->or_like('rasa', $keyword);
+            $this->db->group_end();
+        }
+        if ($id_kategori) {
+            $this->db->where('tbl_produk.id_kategori', $id_kategori);
+        }
+        if ($limit) $this->db->limit($limit, $offset);
+
+        return $this->db->get($this->table)->result();
+    }
+
+    public function count_search($keyword, $id_kategori = null) {
+        $this->db->join('tbl_kategori', 'tbl_kategori.id_kategori = tbl_produk.id_kategori', 'left');
+        $this->db->where('tbl_produk.is_nyiru !=', 1);
+        if ($keyword) {
+            $this->db->group_start();
+            $this->db->like('nama_produk', $keyword);
+            $this->db->or_like('rasa', $keyword);
+            $this->db->group_end();
+        }
+        if ($id_kategori) {
+            $this->db->where('tbl_produk.id_kategori', $id_kategori);
+        }
+
+        return $this->db->count_all_results($this->table);
+    }
+
 
     public function insert($data) {
         $this->db->insert($this->table, $data);

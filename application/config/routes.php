@@ -14,8 +14,10 @@ $route['auth/proses_register'] = 'auth/proses_register';
 
 // Produk Routes
 $route['produk'] = 'produk';
+$route['produk/(:num)'] = 'produk/index/$1';
 $route['produk/detail/(:num)'] = 'produk/detail/$1';
 $route['produk/pesan/(:num)'] = 'produk/pesan/$1';
+
 
 // Keranjang Routes
 $route['keranjang'] = 'keranjang';
@@ -50,7 +52,9 @@ $route['admin/catering/item/edit/(:num)'] = 'admin/catering_item/edit/$1';
 $route['admin/catering/item/hapus/(:num)'] = 'admin/catering_item/hapus/$1';
 $route['admin/catering/item/set_default/(:num)/(:num)'] = 'admin/catering_item/set_default/$1/$2';
 $route['admin/produk'] = 'admin/produk';
+$route['admin/produk/(:num)'] = 'admin/produk/index/$1';
 $route['admin/produk/tambah'] = 'admin/produk/tambah';
+
 $route['admin/produk/edit/(:num)'] = 'admin/produk/edit/$1';
 $route['admin/produk/hapus/(:num)'] = 'admin/produk/hapus/$1';
 $route['admin/kategori'] = 'admin/kategori';
@@ -59,9 +63,11 @@ $route['admin/kategori/edit/(:num)'] = 'admin/kategori/edit/$1';
 $route['admin/kategori/hapus/(:num)'] = 'admin/kategori/hapus/$1';
 $route['admin/pesanan'] = 'admin/pesanan';
 $route['admin/pesanan/update_status/(:num)'] = 'admin/pesanan/update_status/$1';
+
 $route['admin/laporan'] = 'admin/laporan';
 
 // Box Checkout Routes
+
 $route['box_checkout'] = 'box_checkout';
 $route['box_checkout/proses'] = 'box_checkout/proses';
 $route['box_checkout/sukses/(:num)'] = 'box_checkout/sukses/$1';

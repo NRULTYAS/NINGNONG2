@@ -9,6 +9,7 @@ class Laporan extends CI_Controller {
         $this->load->model('pesanan_model');
     }
 
+
     private function cek_admin() {
         if (!$this->session->userdata('id_user') || $this->session->userdata('role') != 'admin') {
             redirect('auth/login');
@@ -30,4 +31,13 @@ class Laporan extends CI_Controller {
         $data['sampai'] = $sampai;
         $this->load->view('admin/laporan', $data);
     }
+
+    // PDF export feature removed - using web-based report view instead
+
 }
+
+
+
+
+
+
