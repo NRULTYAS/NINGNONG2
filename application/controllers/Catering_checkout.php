@@ -80,7 +80,7 @@ class Catering_checkout extends CI_Controller {
         $harga_per_box = (float)$catering_order['harga_per_box'];
         $total_harga = $harga_per_box * $jumlah_box;
 
-        $kode_pesanan = 'CN-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -4));
+        $kode_pesanan = $this->pesanan_model->generate_kode_pesanan();
 
         $detail_kustom = json_encode([
             'paket_id' => $catering_order['paket_id'],

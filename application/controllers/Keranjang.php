@@ -75,4 +75,55 @@ class Keranjang extends CI_Controller {
         $this->keranjang_model->delete($id);
         redirect('keranjang');
     }
+
+    // ===================== AJAX =====================
+    public function tambah_ajax()
+    {
+        if (!$this->session->userdata('id_user')) {
+            echo json_encode(['ok' => false, 'msg' => 'Silakan login terlebih dahulu']);
+            return;
+        }
+        if ($this->session->userdata('role') == 'admin') {
+            echo json_encode(['ok' => false, 'msg' => 'Admin tidak dapat menambahkan produk']);
+            return;
+        }
+
+        $id_user  = $this->session->userdata('id_user');
+        $id_produk = $this->input->post('id_produk');
+        $jumlah   = (int) $this->input->post('jumlah');
+
+        if (!$id_produk || $jumlah < 1) {
+            echo json_encode(['ok' => false, 'msg' => 'Data tidak valid']);
+            return;
+        }
+
+        $produk = $this->produk_model->get_by_id($id_produk);
+        if (!$produk || $produk->stok < $jumlah) {
+            echo json_encode(['ok' => false, 'msg' => 'Stok tidak mencukupi']);
+            return;
+        }
+
+        $existing = $this->keranjang_model->get_by_user_produk($id_user, $id_produk);
+        if ($existing) {
+            $new_jumlah = $existing->jumlah + $jumlah;
+            if ($new_jumlah > $produk->stok) {
+                echo json_encode(['ok' => false, 'msg' => 'Stok tidak mencukupi']);
+                return;
+            }
+            $this->keranjang_model->update($existing->id_keranjang, ['jumlah' => $new_jumlah]);
+        } else {
+            $this->keranjang_model->insert([
+                'id_user'   => $id_user,
+                'id_produk' => $id_produk,
+                'jumlah'    => $jumlah
+            ]);
+        }
+
+        $total_item = $this->keranjang_model->count_by_user($id_user);
+        echo json_encode([
+            'ok'          => true,
+            'msg'         => 'Berhasil ditambahkan ke keranjang',
+            'total_item'  => $total_item
+        ]);
+    }
 }

@@ -1,16 +1,16 @@
 <?php $this->load->view('templates/header_pelanggan'); ?>
 
-<section class="py-20 bg-krem min-h-screen relative overflow-hidden">
+<section class="py-20 bg-background min-h-screen relative overflow-hidden">
     <div class="absolute top-10 right-0 w-72 h-72 bg-green-100/30 blob opacity-30"></div>
-    <div class="absolute bottom-10 left-0 w-72 h-72 bg-coklat-muda/15 blob opacity-30"></div>
+    <div class="absolute bottom-10 left-0 w-72 h-72 bg-primary/10 blob opacity-30"></div>
 
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div class="text-center mb-8">
             <div class="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-5 shadow-lg shadow-green-500/30">
                 <i class="fas fa-check-circle text-4xl text-white"></i>
             </div>
-            <h1 class="text-3xl font-extrabold text-coklat-tua mb-2">Pesanan Berhasil Dibuat!</h1>
-            <p class="text-gray-500">Terima kasih, pesanan Anda telah tercatat di sistem kami.</p>
+            <h1 class="text-3xl font-extrabold text-text-main mb-2 font-heading">Pesanan Berhasil Dibuat!</h1>
+            <p class="text-text-muted">Terima kasih, pesanan Anda telah tercatat di sistem kami.</p>
         </div>
 
         <?php if ($this->session->flashdata('success_box')): ?>
@@ -20,36 +20,36 @@
         <?php endif; ?>
 
         <!-- Ringkasan Pesanan -->
-        <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-coklat-muda/20 shadow-lg shadow-coklat-muda/10 mb-6">
+        <div class="bg-surface/80 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-border-subtle/20 shadow-lg shadow-primary/10 mb-6">
             <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 bg-gradient-to-br from-oranye to-kuning rounded-xl flex items-center justify-center text-white shadow-md">
+                <div class="w-10 h-10 bg-gradient-to-br from-accent to-accent-hover rounded-xl flex items-center justify-center text-white shadow-md">
                     <i class="fas fa-receipt text-sm"></i>
                 </div>
                 <div>
-                    <h3 class="font-bold text-gray-800">Detail Pesanan</h3>
-                    <p class="text-xs text-gray-400">Kode: <?php echo $pesanan->kode_pesanan; ?></p>
+                    <h3 class="font-bold text-text-main">Detail Pesanan</h3>
+                    <p class="text-xs text-text-subtle">Kode: <?php echo $pesanan->kode_pesanan; ?></p>
                 </div>
             </div>
 
-            <div class="bg-krem/40 rounded-xl p-4 mb-4 border border-coklat-muda/20 grid grid-cols-2 gap-4">
+            <div class="bg-background/40 rounded-xl p-4 mb-4 border border-border-subtle/20 grid grid-cols-2 gap-4">
                 <div>
-                    <p class="text-xs text-gray-500 mb-1">Nama Penerima</p>
-                    <p class="font-semibold text-gray-800"><?php echo $pesanan->nama_penerima; ?></p>
+                    <p class="text-xs text-text-subtle mb-1">Nama Penerima</p>
+                    <p class="font-semibold text-text-main"><?php echo $pesanan->nama_penerima; ?></p>
                 </div>
                 <div>
-                    <p class="text-xs text-gray-500 mb-1">No. Telepon</p>
-                    <p class="font-semibold text-gray-800"><?php echo $pesanan->no_hp_penerima; ?></p>
+                    <p class="text-xs text-text-subtle mb-1">No. Telepon</p>
+                    <p class="font-semibold text-text-main"><?php echo $pesanan->no_hp_penerima; ?></p>
                 </div>
                 <div class="col-span-2">
-                    <p class="text-xs text-gray-500 mb-1">Alamat</p>
-                    <p class="font-semibold text-gray-800"><?php echo $pesanan->alamat_pengiriman; ?></p>
+                    <p class="text-xs text-text-subtle mb-1">Alamat</p>
+                    <p class="font-semibold text-text-main"><?php echo $pesanan->alamat_pengiriman; ?></p>
                 </div>
                 <div>
-                    <p class="text-xs text-gray-500 mb-1">Tanggal Kirim</p>
-                    <p class="font-semibold text-gray-800"><?php echo date('d/m/Y', strtotime($pesanan->tanggal_kirim)); ?></p>
+                    <p class="text-xs text-text-subtle mb-1">Tanggal Kirim</p>
+                    <p class="font-semibold text-text-main"><?php echo date('d/m/Y', strtotime($pesanan->tanggal_kirim)); ?></p>
                 </div>
                 <div>
-                    <p class="text-xs text-gray-500 mb-1">Status</p>
+                    <p class="text-xs text-text-subtle mb-1">Status</p>
                     <span class="inline-flex items-center px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold">
                         <?php echo ucfirst($pesanan->status); ?>
                     </span>
@@ -60,26 +60,26 @@
             <div class="space-y-2 mb-4">
                 <?php if (is_array($detail) && isset($detail['items']) && is_array($detail['items'])): ?>
                 <?php foreach ($detail['items'] as $item): ?>
-                <div class="flex justify-between text-sm items-center pb-2 border-b border-coklat-muda/10 last:border-0">
+                <div class="flex justify-between text-sm items-center pb-2 border-b border-border-subtle/10 last:border-0">
                     <div class="flex items-center gap-2">
-                        <div class="w-7 h-7 bg-krem rounded-lg flex items-center justify-center">
-                            <i class="fas fa-cookie-bite text-coklat-tua/30 text-xs"></i>
+                        <div class="w-7 h-7 bg-background rounded-lg flex items-center justify-center">
+                            <i class="fas fa-cookie-bite text-primary/30 text-xs"></i>
                         </div>
-                        <span class="text-gray-600"><?php echo is_array($item) ? $item['nama_produk'] : $item->nama_produk; ?></span>
+                        <span class="text-text-main"><?php echo is_array($item) ? $item['nama_produk'] : $item->nama_produk; ?></span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-400">x<?php echo is_array($item) ? $item['quantity'] : $item->jumlah; ?></span>
-                        <span class="font-medium text-gray-700">Rp <?php echo number_format(is_array($item) ? $item['subtotal'] : $item->subtotal, 0, ',', '.'); ?></span>
+                        <span class="text-xs text-text-subtle">x<?php echo is_array($item) ? $item['quantity'] : $item->jumlah; ?></span>
+                        <span class="font-medium text-text-main">Rp <?php echo number_format(is_array($item) ? $item['subtotal'] : $item->subtotal, 0, ',', '.'); ?></span>
                     </div>
                 </div>
                 <?php endforeach; ?>
                 <?php endif; ?>
             </div>
 
-            <div class="border-t border-coklat-muda/30 pt-4">
+            <div class="border-t border-border-subtle/30 pt-4">
                 <div class="flex justify-between items-center">
-                    <span class="font-bold text-lg text-gray-800">Total Pembayaran</span>
-                    <span class="font-extrabold text-2xl text-coklat-tua">Rp <?php echo number_format($pesanan->total_harga, 0, ',', '.'); ?></span>
+                    <span class="font-bold text-lg text-text-main">Total Pembayaran</span>
+                    <span class="font-extrabold text-2xl text-primary">Rp <?php echo number_format($pesanan->total_harga, 0, ',', '.'); ?></span>
                 </div>
             </div>
         </div>
@@ -102,10 +102,10 @@
         </div>
 
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="<?php echo base_url('riwayat'); ?>" class="px-8 py-3 bg-gradient-to-r from-coklat-tua to-coklat text-white rounded-xl font-semibold shadow-lg shadow-coklat-tua/25 hover:shadow-xl hover:shadow-coklat-tua/30 hover:scale-[1.02] transition-all flex items-center gap-2">
+            <a href="<?php echo base_url('riwayat'); ?>" class="px-8 py-3 bg-primary text-white rounded-full font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] transition-all duration-200 flex items-center gap-2">
                 <i class="fas fa-history"></i> Lihat Riwayat Pesanan
             </a>
-            <a href="<?php echo base_url('home'); ?>" class="px-8 py-3 border border-coklat-muda/40 text-gray-600 rounded-xl font-medium hover:bg-krem/50 hover:border-coklat-muda transition flex items-center gap-2">
+            <a href="<?php echo base_url('home'); ?>" class="px-8 py-3 border border-border-subtle/40 text-text-main rounded-full font-medium hover:bg-background/50 hover:border-border-subtle transition-all duration-200 flex items-center gap-2">
                 <i class="fas fa-home"></i> Kembali ke Beranda
             </a>
         </div>

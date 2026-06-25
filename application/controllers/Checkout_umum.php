@@ -137,7 +137,7 @@ class Checkout_umum extends CI_Controller {
                 redirect('produk');
         }
 
-        $kode_pesanan = strtoupper(substr(uniqid(), -8));
+        $kode_pesanan = $this->pesanan_model->generate_kode_pesanan();
 
         // Upload bukti pembayaran (opsional)
         $bukti_pembayaran = null;
@@ -196,7 +196,7 @@ class Checkout_umum extends CI_Controller {
         }
 
         // Build pesan WhatsApp
-        $kode_pesanan = strtoupper(substr(uniqid(), -8));
+        $kode_pesanan = $this->pesanan_model->generate_kode_pesanan();
         $nama_label = str_replace(['_', '-'], ' ', $order['type']);
         $nama_label = ucwords($nama_label);
 

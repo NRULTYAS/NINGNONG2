@@ -9,7 +9,7 @@ class Keranjang_model extends CI_Model {
     }
 
     public function get_by_user($id_user) {
-        $this->db->select('tbl_keranjang.*, tbl_produk.nama_produk, tbl_produk.harga, tbl_produk.gambar, tbl_produk.stok, tbl_kategori.nama_kategori');
+        $this->db->select('tbl_keranjang.*, tbl_produk.nama_produk, tbl_produk.harga, tbl_produk.gambar, tbl_produk.stok, tbl_produk.rasa, tbl_kategori.nama_kategori');
         $this->db->join('tbl_produk', 'tbl_produk.id_produk = tbl_keranjang.id_produk');
         $this->db->join('tbl_kategori', 'tbl_kategori.id_kategori = tbl_produk.id_kategori');
         return $this->db->get_where($this->table, ['id_user' => $id_user])->result();

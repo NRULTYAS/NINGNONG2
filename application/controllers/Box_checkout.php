@@ -124,7 +124,7 @@ class Box_checkout extends CI_Controller {
             $data['items'] = $items;
             $data['total_box'] = $total_box;
             $data['harga_per_dus'] = $total_box;
-            $data['kode_pesanan'] = 'BOX-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -4));
+            $data['kode_pesanan'] = $this->pesanan_model->generate_kode_pesanan();
             $data['user'] = $this->db->get_where('tbl_user', ['id_user' => $this->session->userdata('id_user')])->row();
             $this->load->view('pelanggan/box_checkout', $data);
             return;
@@ -197,7 +197,7 @@ class Box_checkout extends CI_Controller {
             }
         }
 
-        $kode_pesanan = 'BOX-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -4));
+        $kode_pesanan = $this->pesanan_model->generate_kode_pesanan();
 
         // Simpan ke tabel pesanan
         $pesanan = [

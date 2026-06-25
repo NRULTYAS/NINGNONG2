@@ -1,25 +1,34 @@
 <?php $this->load->view('templates/header_pelanggan'); ?>
 
 
-<section class="py-12 bg-krem min-h-screen relative overflow-hidden">
-    <div class="absolute top-10 right-0 w-72 h-72 bg-oranye-pastel/15 blob opacity-30"></div>
-    <div class="absolute bottom-10 left-0 w-72 h-72 bg-coklat-muda/15 blob opacity-30"></div>
+<section class="py-12 bg-background min-h-screen relative overflow-hidden">
+    <div class="absolute top-10 right-0 w-72 h-72 bg-secondary-light/15 blob opacity-30"></div>
+    <div class="absolute bottom-10 left-0 w-72 h-72 bg-primary/10 blob opacity-30"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <!-- Breadcrumb -->
-        <div class="flex items-center gap-2 text-sm text-gray-500 mb-8">
-            <a href="<?php echo base_url('home'); ?>" class="hover:text-coklat-tua transition">Beranda</a>
+        <div class="flex items-center gap-2 text-sm text-text-muted mb-8">
+            <a href="<?php echo base_url('home'); ?>" class="hover:text-primary transition-colors duration-200">Beranda</a>
             <i class="fas fa-chevron-right text-[10px]"></i>
-            <a href="<?php echo base_url('pesanan/pilih_jenis'); ?>" class="hover:text-coklat-tua transition">Pesan Sekarang</a>
+            <a href="<?php echo base_url('pesanan/pilih_jenis'); ?>" class="hover:text-primary transition-colors duration-200">Pesan Sekarang</a>
             <i class="fas fa-chevron-right text-[10px]"></i>
-            <span class="text-coklat-tua font-medium">SNACK BOX</span>
+            <span class="text-primary font-medium">SNACK BOX</span>
+        </div>
+
+        <!-- Hero Header (Gaya A - center-aligned, matching Beli Satuan/Nyiru/Catering) -->
+        <div class="text-center mb-12">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-secondary-light/50 text-primary rounded-full text-sm font-medium mb-4 border border-secondary/20">
+                <i class="fas fa-gift text-accent text-xs"></i> 🎁 Snack Box
+            </span>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-text-main mb-3 font-heading">Susun Box Favoritmu</h1>
+            <p class="text-text-muted max-w-lg mx-auto">Susun snack box sesuai kebutuhan Anda dengan mudah dan praktis.</p>
         </div>
 
         <div style="display:flex !important; flex-direction:row !important; align-items:flex-start !important; gap:2rem;">
             <!-- Main kiri (katalog) + Sidebar kanan (Isi Box) -->
 
             <aside style="flex:0 0 24rem !important; width:24rem !important; order:2;">
-                <div class="bg-white/80 backdrop-blur-sm rounded-3xl border border-coklat-muda/20 shadow-sm" style="position: sticky; top: 100px;">
+                <div class="bg-surface/80 backdrop-blur-sm rounded-3xl border border-border-subtle/20 shadow-sm" style="position: sticky; top: 100px;">
 
 
 
@@ -27,33 +36,33 @@
                     <div class="p-6">
                         <div class="flex items-start justify-between gap-3">
                             <div>
-                                <h2 class="font-extrabold text-coklat-tua text-xl">Ringkasan Pesanan</h2>
-                                <p class="text-gray-500 text-sm mt-1">Daftar produk yang telah Anda pilih</p>
+                                <h2 class="font-extrabold text-text-main text-xl">Ringkasan Pesanan</h2>
+                                <p class="text-text-muted text-sm mt-1">Daftar produk yang telah Anda pilih</p>
                             </div>
                         </div>
 
                         <div class="mt-6">
-                            <div class="text-xs text-gray-400 mb-2">Produk Pilihan</div>
+                            <div class="text-xs text-text-subtle mb-2">Produk Pilihan</div>
                             <div id="boxItems" class="space-y-3 max-h-72 overflow-auto pr-1">
                                 <!-- terisi dari AJAX -->
                             </div>
                         </div>
 
-                        <div class="mt-5 border-t border-coklat-muda/30 pt-4">
+                        <div class="mt-5 border-t border-border-subtle/20 pt-4">
                             <div class="flex justify-between items-center">
-                                <span class="font-semibold text-gray-700">Total Box</span>
-                                <span id="totalBox" class="font-extrabold text-2xl text-coklat-tua">Rp 0</span>
+                                <span class="font-semibold text-text-main">Total Box</span>
+                                <span id="totalBox" class="font-extrabold text-2xl text-primary">Rp 0</span>
                             </div>
                         </div>
 
                         <div class="mt-4 flex flex-col gap-2">
-                            <button id="btnReset" type="button" class="px-4 py-2.5 rounded-xl border border-coklat-muda/30 text-coklat-tua font-semibold hover:bg-krem/80 transition flex items-center gap-2">
+                            <button id="btnReset" type="button" class="px-4 py-2.5 rounded-xl border border-border-subtle/20 text-text-main font-semibold hover:bg-background/80 transition flex items-center gap-2">
                                 <i class="fas fa-rotate-left"></i> Reset Box
                             </button>
-                            <a href="<?php echo base_url('box_checkout'); ?>" id="btnCheckout" class="px-4 py-3 bg-gradient-to-r from-coklat-tua to-coklat text-white rounded-xl font-semibold hover:shadow-lg shadow-coklat-tua/20 transition text-center">
+                            <a href="<?php echo base_url('box_checkout'); ?>" id="btnCheckout" class="px-4 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-hover hover:shadow-lg shadow-primary/20 transition text-center">
                                 <i class="fas fa-credit-card mr-2"></i> Lanjut Checkout
                             </a>
-                            <p class="text-[11px] text-gray-400 leading-relaxed">
+                            <p class="text-[11px] text-text-subtle leading-relaxed">
                                 Silakan periksa kembali pilihan produk Anda sebelum melanjutkan ke proses checkout.
                             </p>
                         </div>
@@ -62,48 +71,33 @@
             </aside>
 
             <!-- Main -->
-            <div class="flex-1" style="order:1; order:-1;">
+            <div class="flex-1" style="order:1;">
 
-                <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-6 border border-coklat-muda/20 shadow-sm">
-                    <div class="flex items-start justify-between gap-4">
-                        <div>
-                                <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-oranye-pastel/40 text-coklat-tua rounded-full text-sm font-medium border border-oranye/20">
-                                <i class="fas fa-box-open text-oranye text-xs"></i> <span>SNACK BOX</span>
-                            </span>
-                            <h1 class="text-3xl font-extrabold text-coklat-tua mt-3">Susun Box Favoritmu</h1>
-                            <p class="text-gray-500 mt-2">
-                                Susun snack box sesuai kebutuhan Anda dengan mudah dan praktis.
-                            </p>
-                        </div>
+                <!-- Radio Button: Semua box sama isi (moved out of hero card) -->
+                <div class="mb-4 text-right">
+                    <label class="flex items-center justify-end gap-2 text-sm text-text-main font-semibold cursor-pointer select-none">
+                        <input id="radioSameAll" type="radio" name="dist_mode" value="same_all" checked class="h-4 w-4 text-primary" />
+                        Semua box sama isi
+                    </label>
+                </div>
 
-                        <div class="text-right">
-                            <label class="flex items-center justify-end gap-2 text-sm text-coklat-tua font-semibold cursor-pointer select-none">
-                                <input id="radioSameAll" type="radio" name="dist_mode" value="same_all" checked class="h-4 w-4" />
-                                Semua box sama isi
-                            </label>
-
-
-                        </div>
+                <!-- Filter Kategori -->
+                <div class="mb-4 bg-surface/80 backdrop-blur-sm rounded-2xl p-4 border border-border-subtle/20 shadow-sm">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <label class="flex items-center gap-2 text-sm font-semibold text-text-main">
+                            <i class="fas fa-filter text-xs"></i> Filter Kategori:
+                        </label>
+                        <select id="kategoriFilter" class="px-4 py-2.5 rounded-xl border border-border-subtle/30 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 bg-background/30 transition text-sm min-w-[180px]">
+                            <option value="all">Semua Kategori</option>
+                            <?php foreach ($kategori_list as $k): ?>
+                            <option value="<?php echo $k->id_kategori; ?>"><?php echo $k->nama_kategori; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span id="produkCount" class="text-xs text-text-subtle ml-auto"><?php echo count($produk); ?> produk</span>
                     </div>
-                    </div>
+                </div>
 
-                    <!-- Filter Kategori -->
-                    <div class="mt-4 px-1">
-                        <div class="flex flex-wrap items-center gap-3">
-                            <label class="flex items-center gap-2 text-sm font-semibold text-coklat-tua">
-                                <i class="fas fa-filter text-xs"></i> Filter Kategori:
-                            </label>
-                            <select id="kategoriFilter" class="px-4 py-2.5 rounded-xl border border-coklat-muda/30 focus:outline-none focus:border-coklat-tua focus:ring-2 focus:ring-coklat-tua/10 bg-white shadow-sm transition text-sm min-w-[180px]">
-                                <option value="all">Semua Kategori</option>
-                                <?php foreach ($kategori_list as $k): ?>
-                                <option value="<?php echo $k->id_kategori; ?>"><?php echo $k->nama_kategori; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <span id="produkCount" class="text-xs text-gray-400 ml-auto"><?php echo count($produk); ?> produk</span>
-                        </div>
-                    </div>
-
-                    <div id="produkGrid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-5 mt-4">
+                <div id="produkGrid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
                         <?php foreach ($produk as $p): ?>
                             <?php
                                 // catatan: builder menyimpan state quantity di server session (AJAX).

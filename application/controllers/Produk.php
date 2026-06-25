@@ -16,11 +16,15 @@ class Produk extends CI_Controller {
         $keyword = $this->input->get('q', TRUE);
         $id_kategori = $this->input->get('kategori', TRUE);
 
-        if ($keyword || $id_kategori) {
-            $data['produk'] = $this->produk_model->search($keyword, $id_kategori ?: null);
+        $filter_kategori = (!empty($id_kategori)) ? $id_kategori : null;
+
+        if ($keyword || $filter_kategori) {
+            $data['produk'] = $this->produk_model->search($keyword, $filter_kategori);
         } else {
             $data['produk'] = $this->produk_model->get_all();
         }
+
+        $query_produk = $this->db->last_query();
 
         $data['kategori'] = $this->kategori_model->get_all();
         $data['keyword'] = $keyword;

@@ -60,15 +60,28 @@ class Pesanan_model extends CI_Model {
     public function count_by_status($status) {
         return $this->db->where('status', $status)->count_all_results($this->table);
     }
-
-    public function total_penjualan() {
+public function total_penjualan()
+    {
         $this->db->select_sum('total_harga');
         $this->db->where('status !=', 'dibatalkan');
         $result = $this->db->get($this->table)->row();
         return $result->total_harga ?: 0;
     }
 
-    public function laporan_periode($dari, $sampai) {
+    public function generate_kode_pesanan()
+    {
+        $this->db->trans_start();
+        $this->db->query("INSERT INTO tbl_order_sequence (last_number) VALUES (1) ON DUPLICATE KEY UPDATE last_number = LAST_INSERT_ID(last_number + 1)");
+        $this->db->trans_complete();
+        
+        $result = $this->db->query("SELECT LAST_INSERT_ID() as new_id")->row();
+        $nomor_urut = $result ? (int)$result->new_id : 1;
+        
+        return 'ORD-' . str_pad($nomor_urut, 6, '0', STR_PAD_LEFT);
+    }
+
+    public function laporan_periode($dari, $sampai)
+    {
         $this->db->join('tbl_user', 'tbl_user.id_user = tbl_pesanan.id_user');
         $this->db->where('tbl_pesanan.created_at >=', $dari . ' 00:00:00');
         $this->db->where('tbl_pesanan.created_at <=', $sampai . ' 23:59:59');

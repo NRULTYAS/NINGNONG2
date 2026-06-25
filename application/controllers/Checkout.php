@@ -53,7 +53,7 @@ class Checkout extends CI_Controller {
             $total += $item->harga * $item->jumlah;
         }
 
-        $kode_pesanan = 'NN-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -4));
+        $kode_pesanan = $this->pesanan_model->generate_kode_pesanan();
 
         $pesanan = [
             'id_user' => $id_user,
@@ -88,7 +88,6 @@ class Checkout extends CI_Controller {
         $this->keranjang_model->delete_by_user($id_user);
 
         // Buat pesan WhatsApp
-        $kode_pesanan = 'NN-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -4));
         $pesan = "Halo NINGNONG Kue Basah,%0A%0A";
         $pesan .= "Saya ingin konfirmasi pesanan *Pesan Satuan* dengan kode: *" . $kode_pesanan . "*%0A%0A";
         $pesan .= "*Detail Pesanan:*%0A";

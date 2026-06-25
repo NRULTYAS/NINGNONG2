@@ -16,7 +16,7 @@ class Nyiru extends CI_Controller {
 
     public function index()
     {
-        $data['ukuran_list'] = $this->produk_model->get_by_kategori(7);
+        $data['ukuran_list'] = $this->produk_model->get_nyiru();
         $data['user'] = $this->user_model->get_by_id($this->session->userdata('id_user'));
         $this->load->view('pelanggan/nyiru', $data);
     }
