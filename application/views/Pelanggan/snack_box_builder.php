@@ -87,7 +87,7 @@
                         <label class="flex items-center gap-2 text-sm font-semibold text-text-main">
                             <i class="fas fa-filter text-xs"></i> Filter Kategori:
                         </label>
-                        <select id="kategoriFilter" class="px-4 py-2.5 rounded-xl border border-border-subtle/30 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 bg-background/30 transition text-sm min-w-[180px]">
+                        <select id="kategoriFilter" class="select-filter px-4 py-2.5 rounded-xl border border-secondary bg-surface text-text-main font-body transition text-sm min-w-[180px]">
                             <option value="all">Semua Kategori</option>
                             <?php foreach ($kategori_list as $k): ?>
                             <option value="<?php echo $k->id_kategori; ?>"><?php echo $k->nama_kategori; ?></option>

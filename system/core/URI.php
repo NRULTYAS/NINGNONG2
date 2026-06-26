@@ -51,6 +51,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_URI {
 
+	/** @var array<string,mixed> */
+	protected array $__ci_dynamic = [];
+
+
 	/**
 	 * List of cached URI segments
 	 *

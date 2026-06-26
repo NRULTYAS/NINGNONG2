@@ -105,9 +105,9 @@
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <?php foreach($rekomendasi as $r): $p = $r['produk']; ?>
                 <a href="<?php echo base_url('produk/detail/'.$p->id_produk); ?>" class="bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-200 border border-border-subtle/10 group card-hover">
-                    <div class="aspect-[4/3] bg-gradient-to-br from-primary/10 to-background flex items-center justify-center relative overflow-hidden">
+                    <div class="product-card-image-wrapper bg-gradient-to-br from-primary/10 to-background">
                         <?php if($p->gambar && file_exists(FCPATH . 'assets/upload/'.$p->gambar)): ?>
-                        <img src="<?php echo base_url('assets/upload/'.$p->gambar); ?>" alt="<?php echo $p->nama_produk; ?>" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <img src="<?php echo base_url('assets/upload/'.$p->gambar); ?>" alt="<?php echo $p->nama_produk; ?>" class="product-card-image group-hover:scale-110 transition duration-700">
                         <?php else: ?>
                         <i class="fas fa-cookie-bite text-5xl text-primary/15"></i>
                         <?php endif; ?>
@@ -128,4 +128,3 @@
 </section>
 
 <?php $this->load->view('templates/footer_pelanggan'); ?>
-

@@ -53,6 +53,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_Controller {
 
 	/**
+	 * Allow PHP 8.2+ to avoid dynamic property deprecations.
+	 * CI 3 assigns core objects into the controller via dynamic properties.
+	 * @var array<string,mixed>
+	 */
+	protected array $__ci_dynamic = [];
+
+
+	/**
 	 * Reference to the CI singleton
 	 *
 	 * @var	object

@@ -9,7 +9,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative">
         <div class="grid grid-cols-2 md:grid-cols-12 gap-8 lg:gap-12">
             <!-- Logo & Deskripsi -->
-            <div class="col-span-2 md:col-span-5">
+            <div class="col-span-2 md:col-span-5 flex flex-col">
                 <div class="flex items-center gap-3 mb-5">
                     <div class="w-10 h-10 bg-surface rounded-xl flex items-center justify-center text-primary font-bold text-base shadow-lg">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="#7C8C6C"/><circle cx="12" cy="12" r="3" fill="#7C8C6C"/></svg>
@@ -23,11 +23,8 @@
                     Kue basah tradisional dengan sentuhan modern. Dibuat dari bahan pilihan untuk cita rasa otentik.
                 </p>
                 <div class="flex gap-3">
-                    <a href="#" class="w-9 h-9 bg-background/15 rounded-xl flex items-center justify-center hover:bg-background/30 transition-colors duration-200 text-background hover:text-accent">
+                    <a href="https://www.instagram.com/ningnong_kue?igsh=MXdrdmNuYXA2YXJreA==" target="_blank" class="w-9 h-9 bg-background/15 rounded-xl flex items-center justify-center hover:bg-background/30 transition-colors duration-200 text-background hover:text-accent">
                         <i class="fab fa-instagram text-sm"></i>
-                    </a>
-                    <a href="#" class="w-9 h-9 bg-background/15 rounded-xl flex items-center justify-center hover:bg-background/30 transition-colors duration-200 text-background hover:text-accent">
-                        <i class="fab fa-facebook-f text-sm"></i>
                     </a>
                     <a href="https://wa.me/<?php echo NOMOR_WA_PENJUAL; ?>" target="_blank" class="w-9 h-9 bg-background/15 rounded-xl flex items-center justify-center hover:bg-background/30 transition-colors duration-200 text-background hover:text-accent">
                         <i class="fab fa-whatsapp text-sm"></i>
@@ -36,7 +33,7 @@
             </div>
 
             <!-- Menu -->
-            <div class="md:col-span-2">
+            <div class="md:col-span-2 pt-0.5">
                 <h4 class="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent mb-4 font-heading">Menu</h4>
                 <ul class="space-y-3 text-background/80 text-sm">
                     <li><a href="<?php echo base_url('home'); ?>" class="hover:text-background transition-colors duration-200">Beranda</a></li>
@@ -47,35 +44,27 @@
             </div>
 
             <!-- Kontak -->
-            <div class="md:col-span-3">
+            <div class="md:col-span-3 pt-0.5">
                 <h4 class="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent mb-4 font-heading">Kontak</h4>
                 <ul class="space-y-3 text-background/80 text-sm">
                     <li class="flex items-start gap-3">
-                        <i class="fas fa-map-marker-alt mt-1 text-accent text-xs"></i>
-                        <span>Jl. Kue Basah No. 1, Jakarta</span>
+                        <i class="fas fa-map-marker-alt mt-1 text-accent text-xs flex-shrink-0"></i>
+                        <span class="leading-relaxed">Gbi, Komp, Jl. Alam Raya No.4, RW.5, Buahbatu, Kec. Bojongsoang, Kabupaten Bandung, Jawa Barat 40287</span>
                     </li>
                     <li class="flex items-center gap-3">
-                        <i class="fas fa-phone text-accent text-xs"></i>
-                        <span>0812-3456-7890</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-envelope text-accent text-xs"></i>
-                        <span>info@ningnong.com</span>
+                        <i class="fas fa-phone text-accent text-xs flex-shrink-0"></i>
+                        <span>0821-1976-4204</span>
                     </li>
                 </ul>
             </div>
 
             <!-- Jam Operasional -->
-            <div class="md:col-span-2">
+            <div class="md:col-span-2 pt-0.5">
                 <h4 class="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent mb-4 font-heading">Jam Buka</h4>
                 <ul class="space-y-3 text-background/80 text-sm">
                     <li class="flex items-center gap-3">
-                        <i class="fas fa-clock text-accent text-xs"></i>
-                        <span>Senin - Jumat: 08.00 - 20.00</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-clock text-accent text-xs"></i>
-                        <span>Sabtu - Minggu: 07.00 - 21.00</span>
+                        <i class="fas fa-clock text-accent text-xs flex-shrink-0"></i>
+                        <span>Setiap Hari 05.00 - 12.00</span>
                     </li>
                 </ul>
             </div>

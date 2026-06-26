@@ -35,8 +35,11 @@ class Catering extends CI_Controller {
             if (!empty($_FILES['foto']['name'])) {
                 $config['upload_path'] = FCPATH . 'assets/upload/';
                 $config['allowed_types'] = 'jpg|jpeg|png|webp';
-                $config['max_size'] = 2048;
+                $config['max_size'] = 10240;
+                $config['max_width'] = 4000;
+                $config['max_height'] = 4000;
                 $config['file_name'] = 'catering_' . time() . '_' . $_FILES['foto']['name'];
+
                 $this->load->library('upload', $config);
                 if ($this->upload->do_upload('foto')) {
                     $foto = $this->upload->data('file_name');
@@ -82,15 +85,23 @@ class Catering extends CI_Controller {
             if (!empty($_FILES['foto']['name'])) {
                 $config['upload_path'] = FCPATH . 'assets/upload/';
                 $config['allowed_types'] = 'jpg|jpeg|png|webp';
-                $config['max_size'] = 2048;
+                $config['max_size'] = 10240;
+                $config['max_width'] = 4000;
+                $config['max_height'] = 4000;
                 $config['file_name'] = 'catering_' . time() . '_' . $_FILES['foto']['name'];
+
                 $this->load->library('upload', $config);
-                if ($this->upload->do_upload('foto')) {
+                $upload_ok = $this->upload->do_upload('foto');
+
+                if ($upload_ok) {
                     $old_foto = $data['paket']->foto;
                     if ($old_foto && $old_foto != 'default.jpg' && file_exists(FCPATH . 'assets/upload/' . $old_foto)) {
                         unlink(FCPATH . 'assets/upload/' . $old_foto);
                     }
                     $update['foto'] = $this->upload->data('file_name');
+                } else {
+                    // DEBUG: simpan error upload agar mudah dicari kalau DB tetap default.jpg
+                    $this->session->set_flashdata('error', 'Gagal upload foto paket: ' . strip_tags($this->upload->display_errors('', '')));
                 }
             }
 
@@ -111,3 +122,4 @@ class Catering extends CI_Controller {
         redirect('admin/catering');
     }
 }
+

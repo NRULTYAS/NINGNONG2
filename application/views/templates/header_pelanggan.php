@@ -61,6 +61,8 @@ $jumlah_keranjang = isset($jumlah_keranjang) ? $jumlah_keranjang : 0;
         .card-hover:hover { transform: translateY(-6px); }
         .blob { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
         .organic-shape { border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%; }
+        /* Product card grid alignment */
+        .product-grid { align-items: stretch; }
 
         /* Hilangkan spinner native browser untuk input qty (type=number) agar konsisten dengan tombol +/- kustom */
         input[type="number"]::-webkit-inner-spin-button,
@@ -70,6 +72,38 @@ $jumlah_keranjang = isset($jumlah_keranjang) ? $jumlah_keranjang : 0;
         }
         input[type="number"] {
             -moz-appearance: textfield;
+        }
+
+        /* ===== Konsistensi Gambar Produk di Card ===== */
+        /* Pastikan semua gambar produk di card memiliki tinggi seragam dengan object-fit: cover */
+        .product-card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        /* Container gambar produk di card — pastikan aspect ratio konsisten */
+        .product-card-image-wrapper {
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===== Custom Select Styling (Filter Kategori) ===== */
+        .select-filter {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23A8B29A' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 18px;
+            padding-right: 44px;
+            cursor: pointer;
+        }
+        .select-filter:focus {
+            border-color: #7C8C6C;
+            box-shadow: 0 0 0 3px rgba(124,140,108,0.15);
         }
     </style>
 </head>

@@ -51,6 +51,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_Loader {
 
+	/**
+	 * Prevent PHP 8.2+ dynamic property deprecations.
+	 * CI assigns core objects into controllers and exposes loader internals dynamically.
+	 */
+	protected array $__ci_dynamic = [];
+
+
 	// All these are set automatically. Don't mess with them.
 	/**
 	 * Nesting level of the output buffering mechanism

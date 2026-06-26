@@ -33,7 +33,12 @@
 </div>
 
 <?php if($dari && $sampai): ?>
+
 <div class="bg-surface rounded-2xl shadow-sm border border-border-subtle overflow-hidden">
+
+<?php if(!empty($laporan)): ?>
+
+<?php endif; ?>
     <div class="p-6 border-b border-border-subtle flex justify-between items-center bg-accent-light/50">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-white shadow-md">
@@ -45,6 +50,7 @@
             <?php echo date('d M Y', strtotime($dari)); ?> - <?php echo date('d M Y', strtotime($sampai)); ?>
         </span>
     </div>
+
     <?php if(empty($laporan)): ?>
     <div class="py-16 text-center">
         <div class="w-20 h-20 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">

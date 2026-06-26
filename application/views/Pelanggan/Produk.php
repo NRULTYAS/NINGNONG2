@@ -39,7 +39,7 @@
                         class="w-full pl-11 pr-4 py-3.5 rounded-xl border border-border-subtle/30 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 bg-background/30 transition-colors duration-200">
                 </div>
 
-                <select name="kategori" onchange="this.form.submit()" class="px-4 py-3.5 rounded-xl border border-border-subtle/30 bg-background/30 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors duration-200">
+                <select name="kategori" onchange="this.form.submit()" class="select-filter px-4 py-3.5 rounded-xl border border-secondary bg-surface text-text-main font-body transition-colors duration-200 w-auto md:min-w-[200px]">
                     <option value="" <?php echo (!isset($id_kategori) || $id_kategori === '' || $id_kategori === null) ? 'selected' : ''; ?>>Semua Kategori</option>
 
                     <?php foreach($kategori as $k): ?>
@@ -71,27 +71,31 @@
 
         <?php else: ?>
 
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 product-grid">
 
                 <?php foreach($produk as $p): ?>
 
-                    <div class="bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-200">
+                    <div class="bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-200 flex flex-col h-full">
 
-                        <div class="aspect-[4/3] bg-gradient-to-br from-primary/10 to-background flex items-center justify-center relative overflow-hidden">
+                        <div class="product-card-image-wrapper bg-gradient-to-br from-primary/10 to-background">
 
                             <?php if($p->gambar && file_exists(FCPATH . 'assets/upload/'.$p->gambar)): ?>
-                                <img src="<?php echo base_url('assets/upload/'.$p->gambar); ?>"
-                                     alt="<?php echo $p->nama_produk; ?>"
-                                     class="w-full h-full object-cover">
+                                <a href="<?php echo base_url('produk/detail/'.$p->id_produk); ?>" class="block w-full h-full">
+                                    <img src="<?php echo base_url('assets/upload/'.$p->gambar); ?>"
+                                         alt="<?php echo $p->nama_produk; ?>"
+                                         class="product-card-image hover:opacity-95 transition-opacity duration-200">
+                                </a>
                             <?php else: ?>
                                 <i class="fas fa-cookie-bite text-6xl text-primary/15"></i>
                             <?php endif; ?>
 
                         </div>
 
-                        <div class="p-6">
-                            <h3 class="font-bold text-text-main mb-1">
-                                <?php echo $p->nama_produk; ?>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="font-bold text-text-main mb-1 cursor-pointer hover:text-primary transition-colors duration-200">
+                                <a href="<?php echo base_url('produk/detail/'.$p->id_produk); ?>" class="block">
+                                    <?php echo $p->nama_produk; ?>
+                                </a>
                             </h3>
 
                             <p class="text-sm text-text-muted mb-3">
@@ -122,13 +126,20 @@
                                 </div>
                             </div>
 
-                            <!-- Tombol Tambah ke Keranjang -->
-                            <button type="button"
-                                    class="btnAddCart w-full px-4 py-2.5 bg-primary text-white rounded-full text-sm font-semibold hover:bg-primary-hover transition-all duration-200 flex items-center justify-center gap-2 shadow-md shadow-primary/20"
-                                    data-id="<?php echo $p->id_produk; ?>"
-                                    data-stok="<?php echo $p->stok; ?>">
-                                <i class="fas fa-cart-plus text-xs"></i> Tambah ke Keranjang
-                            </button>
+                            <div class="flex flex-col gap-3 mt-auto">
+                                <a href="<?php echo base_url('produk/detail/'.$p->id_produk); ?>"
+                                   class="w-full h-10 inline-flex items-center justify-center rounded-full bg-surface border border-primary text-primary text-sm font-semibold hover:bg-primary hover:text-white transition-all duration-200">
+                                    Lihat Detail
+                                </a>
+
+                                <!-- Tombol Tambah ke Keranjang -->
+                                <button type="button"
+                                        class="btnAddCart w-full h-10 px-4 bg-primary text-white rounded-full text-sm font-semibold hover:bg-primary-hover transition-all duration-200 flex items-center justify-center gap-2 shadow-md shadow-primary/20"
+                                        data-id="<?php echo $p->id_produk; ?>"
+                                        data-stok="<?php echo $p->stok; ?>">
+                                    <i class="fas fa-cart-plus text-xs"></i> Tambah ke Keranjang
+                                </button>
+                            </div>
                         </div>
 
                     </div>
@@ -139,10 +150,36 @@
 
         <?php endif; ?>
     </div>
+
+
+    
+        <?php
+        // Custom pagination pill UI (single source of truth)
+        $pagination_html = isset($pagination) ? $pagination : '';
+        ?>
+
+        <?php if (!empty($pagination_html)) : ?>
+            <div class="mt-12 flex items-center justify-center">
+                <div class="flex items-center justify-center flex-wrap gap-2">
+                    <?php
+                    $html = (string)$pagination_html;
+                    $html = str_replace('class="current"', 'class="bg-primary text-white"', $html);
+                    $html = str_replace('class="active"', 'class="bg-primary text-white"', $html);
+                    $html = str_replace('pagination', '', $html);
+                    $html = str_replace('<a ', '<a class="h-10 min-w-[40px] px-3 inline-flex items-center justify-center rounded-full bg-secondary-light text-primary font-semibold text-sm hover:-translate-y-[2px] transition-all duration-200 hover:bg-secondary/70" ', $html);
+                    $html = str_replace('<span ', '<span class="h-10 min-w-[40px] px-3 inline-flex items-center justify-center rounded-full bg-secondary-light text-primary font-semibold text-sm" ', $html);
+                    $html = str_replace('class="bg-primary text-white"', 'class="h-10 min-w-[40px] px-3 inline-flex items-center justify-center rounded-full bg-primary text-white font-semibold text-sm"', $html);
+                    echo $html;
+                    ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+    </div>
 </section>
 
 <!-- Toast Notification -->
-<div id="toast-notif" class="fixed top-24 right-4 z-[9999] bg-surface border border-border-subtle shadow-lg rounded-2xl px-5 py-3.5 flex items-center gap-3 transform translate-x-[150%] transition-transform duration-300 ease-in-out">
+<div id="toast-notif" class="fixed top-4 right-4 z-[9999] bg-surface rounded-2xl shadow-xl border border-border-subtle px-5 py-4 flex items-center gap-3 translate-x-[150%] transition-transform duration-300">
     <span class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600">
         <i class="fas fa-check text-xs"></i>
     </span>

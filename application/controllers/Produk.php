@@ -11,20 +11,26 @@ class Produk extends CI_Controller {
         $this->load->model('rekomendasi');
     }
 
-    public function index()
+    public function index($page = 1)
     {
+        $per_page = 12;
+        $page = (int)$page;
+        if ($page < 1) $page = 1;
+        $offset = ($page - 1) * $per_page;
+
         $keyword = $this->input->get('q', TRUE);
         $id_kategori = $this->input->get('kategori', TRUE);
 
         $filter_kategori = (!empty($id_kategori)) ? $id_kategori : null;
 
+        // Pagination: jika ada keyword/kategori, pakai query paginated
         if ($keyword || $filter_kategori) {
-            $data['produk'] = $this->produk_model->search($keyword, $filter_kategori);
+            $data['produk'] = $this->produk_model->search_paginated($keyword, $filter_kategori, $per_page, $offset);
+            $total_rows = $this->produk_model->count_search($keyword, $filter_kategori);
         } else {
-            $data['produk'] = $this->produk_model->get_all();
+            $data['produk'] = $this->produk_model->get_all($per_page, $offset);
+            $total_rows = $this->produk_model->count_all();
         }
-
-        $query_produk = $this->db->last_query();
 
         $data['kategori'] = $this->kategori_model->get_all();
         $data['keyword'] = $keyword;
@@ -32,9 +38,27 @@ class Produk extends CI_Controller {
         $data['jumlah_keranjang'] = $this->session->userdata('id_user') 
             ? $this->keranjang_model->count_by_user($this->session->userdata('id_user')) 
             : 0;
-        
+
+        $config = [
+            'base_url' => base_url('produk'),
+            'total_rows' => (int)$total_rows,
+            'per_page' => $per_page,
+            'uri_segment' => 2,
+            'page_query_string' => FALSE,
+            'use_page_numbers' => TRUE,
+        ];
+
+        $this->load->library('pagination');
+        $this->pagination->initialize($config);
+
+        $data['pagination'] = $this->pagination->create_links();
+        $data['page'] = $page;
+        $data['per_page'] = $per_page;
+        $data['offset'] = $offset;
+
         $this->load->view('pelanggan/produk', $data);
     }
+
 
     public function detail($id)
     {

@@ -49,8 +49,18 @@
                     <div class="w-6 h-6 rounded-lg bg-secondary flex items-center justify-center text-white text-xs"><i class="fas fa-image"></i></div>
                     Foto Paket
                 </label>
-                <div class="relative">
-                    <input type="file" name="foto" accept="image/*" class="w-full px-4 py-3 rounded-xl border border-dashed border-border-subtle focus:outline-none focus:border-primary bg-accent-light/20 hover:bg-accent-light/40 transition file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white file:cursor-pointer">
+
+                <div class="flex items-start gap-6">
+                    <div class="w-40 h-40 flex-shrink-0 bg-accent-light/20 border border-border-subtle rounded-xl overflow-hidden flex items-center justify-center">
+                        <span class="text-text-muted text-sm">Preview</span>
+                    </div>
+
+                    <div class="flex-1">
+                        <div class="flex items-center">
+                            <input type="file" name="foto" accept="image/*" class="block w-full px-4 py-3 rounded-xl border border-dashed border-border-subtle focus:outline-none focus:border-primary bg-accent-light/20 hover:bg-accent-light/40 transition file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white file:cursor-pointer">
+                        </div>
+                        <p class="mt-2 text-xs text-text-muted">Dukungan: JPG, PNG, WEBP • Max 10MB</p>
+                    </div>
                 </div>
             </div>
             <div class="mb-8">
