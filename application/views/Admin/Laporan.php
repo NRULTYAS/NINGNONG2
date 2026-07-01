@@ -27,6 +27,17 @@
 </div>
 
 <?php if (isset($dari) && isset($sampai) && $dari && $sampai): ?>
+<div class="bg-surface rounded-2xl shadow-sm border border-border-subtle p-6 mb-6 flex items-center justify-between">
+    <div>
+        <p class="text-text-muted mb-1">Total Pendapatan</p>
+        <h2 class="text-3xl font-bold text-primary font-heading">Rp <?php echo number_format($total_pendapatan,0,',','.'); ?></h2>
+        <p class="text-sm text-text-subtle mt-1">Periode: <?php echo date('d M Y', strtotime($dari)); ?> - <?php echo date('d M Y', strtotime($sampai)); ?></p>
+    </div>
+    <div class="w-14 h-14 rounded-2xl bg-accent flex items-center justify-center text-white shadow-md shadow-accent/20">
+        <i class="fas fa-wallet text-xl"></i>
+    </div>
+</div>
+
 <div class="bg-surface rounded-2xl shadow-sm border border-border-subtle overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left">
@@ -111,6 +122,19 @@
                     </tr>
                 <?php endif; ?>
             </tbody>
+            <?php if (!empty($laporan)): ?>
+            <tfoot>
+                <tr class="bg-accent-light font-bold">
+                    <td class="px-6 py-4 text-text-main">TOTAL</td>
+                    <td></td>
+                    <td class="px-6 py-4 text-primary">Rp <?php echo number_format($total_pendapatan,0,',','.'); ?></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+            <?php endif; ?>
         </table>
     </div>
 </div>
