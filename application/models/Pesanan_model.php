@@ -80,13 +80,28 @@ public function total_penjualan()
         return 'ORD-' . str_pad($nomor_urut, 6, '0', STR_PAD_LEFT);
     }
 
-    public function laporan_periode($dari, $sampai)
+    public function total_pendapatan_periode($dari, $sampai)
     {
-        $this->db->join('tbl_user', 'tbl_user.id_user = tbl_pesanan.id_user');
+        $this->db->select_sum('tbl_pesanan.total_harga');
         $this->db->where('tbl_pesanan.created_at >=', $dari . ' 00:00:00');
         $this->db->where('tbl_pesanan.created_at <=', $sampai . ' 23:59:59');
-        $this->db->where('status !=', 'dibatalkan');
+        $this->db->where('tbl_pesanan.status !=', 'dibatalkan');
+        $result = $this->db->get($this->table)->row();
+        return $result->total_harga ?: 0;
+    }
+
+    // Data untuk tabel laporan penjualan (view admin/laporan.php)
+    // Mengembalikan objek dengan field: kode_pesanan, nama_penerima, no_hp_penerima,
+    // total_harga, metode_pembayaran, bukti_pembayaran, status, created_at
+    public function laporan_periode($dari, $sampai)
+    {
+        $this->db->select('tbl_pesanan.kode_pesanan, tbl_pesanan.nama_penerima, tbl_pesanan.no_hp_penerima, tbl_pesanan.total_harga, tbl_pesanan.metode_pembayaran, tbl_pesanan.bukti_pembayaran, tbl_pesanan.status, tbl_pesanan.created_at');
+        $this->db->from('tbl_pesanan');
+        $this->db->where('tbl_pesanan.created_at >=', $dari . ' 00:00:00');
+        $this->db->where('tbl_pesanan.created_at <=', $sampai . ' 23:59:59');
+        $this->db->where('tbl_pesanan.status !=', 'dibatalkan');
         $this->db->order_by('tbl_pesanan.created_at', 'DESC');
-        return $this->db->get($this->table)->result();
+        return $this->db->get()->result();
     }
 }
+
