@@ -98,13 +98,14 @@
                 </div>
 
                 <!-- Bukti Pembayaran -->
-                <div class="bg-surface/80 backdrop-blur-sm rounded-2xl p-6 border border-border-subtle/20 shadow-sm">
+                <div class="bg-surface/80 backdrop-blur-sm rounded-2xl p-6 border border-border-subtle/20 shadow-sm" id="bukti-section">
                     <h3 class="font-bold text-text-main mb-4 text-lg flex items-center gap-3 font-heading">
                         <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-blue-500/20">
                             <i class="fas fa-upload text-sm"></i>
                         </div>
-                        Bukti Pembayaran (Opsional)
+                        Bukti Pembayaran
                     </h3>
+                    <p id="bukti-label" class="text-xs text-red-500 font-medium mt-1 mb-3">* Wajib dilampirkan untuk metode Transfer / QRIS</p>
                     <div class="border-2 border-dashed border-primary/30 rounded-xl p-6 text-center hover:border-primary/40 transition-colors duration-200 bg-background/20">
                         <input type="file" name="bukti_pembayaran" accept="image/*" class="hidden" id="bukti-upload">
                         <label for="bukti-upload" class="cursor-pointer flex flex-col items-center">
@@ -119,6 +120,7 @@
                             <p id="file-name" class="text-xs text-text-subtle mt-1"></p>
                         </div>
                     </div>
+                    <p id="bukti-error" class="text-xs text-red-500 mt-2 hidden">Bukti pembayaran wajib dilampirkan untuk metode Transfer/QRIS.</p>
                 </div>
             </div>
 
@@ -157,6 +159,14 @@
                             </div>
                             <i class="fas fa-mobile-alt text-border-subtle group-hover:text-primary transition-colors duration-200"></i>
                         </label>
+                    </div>
+
+                    <!-- QRIS Image - tampil hanya saat metode E-Wallet/QRIS dipilih -->
+                    <div id="qrisContainer" class="mt-5 text-center" style="display:none;">
+                        <div style="display:inline-block; border:1px solid #ddd; border-radius:8px; padding:8px; background:#fff;">
+                            <img src="<?= base_url('assets/img/qris.jpeg') ?>" alt="QRIS Pembayaran" style="max-width:300px; width:100%; height:auto; display:block; margin:0 auto;">
+                        </div>
+                        <p class="text-xs text-text-subtle mt-2">Scan QRIS berikut untuk melakukan pembayaran</p>
                     </div>
                 </div>
 
@@ -241,35 +251,87 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTotal();
     }
 
-    // Frontend validation minimal order
+    // Frontend validation
     const btnSubmit = document.querySelector('button[type="submit"]');
     const orderType = order.type || '';
     const minOrder = orderType === 'catering' ? 25 : (orderType === 'snack_box' ? 15 : 1);
-
-    function validateMin() {
-        const qty = parseInt(qtyInput.value) || 0;
-        if (qty < minOrder) {
-            btnSubmit.disabled = true;
-            btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
-        } else {
-            btnSubmit.disabled = false;
-            btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
-        }
-    }
-
-    if (qtyInput && btnSubmit) {
-        qtyInput.addEventListener('input', validateMin);
-        validateMin();
-    }
-
-    // Preview file upload bukti pembayaran
-    const fileInput = document.getElementById('bukti-upload');
+    const buktiUpload = document.getElementById('bukti-upload');
+    const buktiError = document.getElementById('bukti-error');
+    const buktiLabel = document.getElementById('bukti-label');
     const filePreview = document.getElementById('file-preview');
     const previewImg = document.getElementById('preview-img');
     const fileName = document.getElementById('file-name');
 
-    if (fileInput) {
-        fileInput.addEventListener('change', function() {
+    function validateForm() {
+        const qty = parseInt(qtyInput.value) || 0;
+        const metode = document.querySelector('input[name="metode_pembayaran"]:checked');
+        const metodeVal = metode ? metode.value : '';
+
+        let valid = true;
+
+        // Validasi minimal order
+        if (qty < minOrder) {
+            valid = false;
+        }
+
+        // Validasi bukti pembayaran utk Transfer / QRIS / E-Wallet
+        const isPaidMethod = (metodeVal === 'Transfer Bank' || metodeVal === 'E-Wallet' || metodeVal === 'QRIS');
+        const hasFile = buktiUpload && buktiUpload.files && buktiUpload.files.length > 0;
+
+        if (isPaidMethod && !hasFile) {
+            valid = false;
+            buktiError.classList.remove('hidden');
+            buktiLabel.classList.remove('hidden');
+        } else {
+            buktiError.classList.add('hidden');
+            if (isPaidMethod) {
+                buktiLabel.classList.remove('hidden');
+            } else {
+                buktiLabel.classList.add('hidden');
+            }
+        }
+
+        if (valid) {
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else {
+            btnSubmit.disabled = true;
+            btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+    }
+    // Expose so other script blocks (e.g. payment-method label click handler) can force re-validation
+    window.validateCheckoutForm = validateForm;
+
+    if (qtyInput && btnSubmit) {
+        qtyInput.addEventListener('input', validateForm);
+        document.querySelectorAll('input[name="metode_pembayaran"]').forEach(function(radio) {
+            radio.addEventListener('change', validateForm);
+        });
+        validateForm();
+    }
+
+    // Toggle QRIS image based on selected payment method
+    var qrisContainer = document.getElementById('qrisContainer');
+
+    function toggleQRIS() {
+        var metode = document.querySelector('input[name="metode_pembayaran"]:checked');
+        if (metode && (metode.value === 'E-Wallet' || metode.value === 'QRIS')) {
+            qrisContainer.style.display = 'block';
+        } else {
+            qrisContainer.style.display = 'none';
+        }
+    }
+
+    // Listen to payment method changes for QRIS toggle
+    document.querySelectorAll('input[name="metode_pembayaran"]').forEach(function(radio) {
+        radio.addEventListener('change', toggleQRIS);
+    });
+    // Check initial state
+    toggleQRIS();
+
+    // Preview file upload
+    if (buktiUpload) {
+        buktiUpload.addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -280,28 +342,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
                 reader.readAsDataURL(file);
             }
+            validateForm();
         });
     }
-
-    // Toggle panel QRIS / Transfer Bank
-    const metodeRadios = document.querySelectorAll('input[name="metode_pembayaran"]');
-    const panelQris = document.getElementById('panel-qris');
-    const panelTransfer = document.getElementById('panel-transfer');
-
-    function toggleMetode() {
-        const selected = document.querySelector('input[name="metode_pembayaran"]:checked');
-        if (!selected) return;
-        if (selected.value === 'QRIS') {
-            panelQris.classList.remove('hidden');
-            panelTransfer.classList.add('hidden');
-        } else {
-            panelQris.classList.add('hidden');
-            panelTransfer.classList.remove('hidden');
-        }
-    }
-
-    metodeRadios.forEach(r => r.addEventListener('change', toggleMetode));
-    toggleMetode();
 });
 
 // Copy nomor rekening ke clipboard
@@ -343,16 +386,16 @@ function copyRekening(btn) {
                         <i class="fas fa-university text-sm"></i>
                     </div>
                     <div>
-                        <p class="font-semibold text-text-main text-sm">[NAMA_BANK]</p>
+                        <p class="font-semibold text-text-main text-sm">BJB</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between bg-surface rounded-xl px-4 py-3 border border-border-subtle/20 mb-3">
-                    <span class="font-mono font-bold text-primary text-base select-all">[NO_REKENING]</span>
-                    <button onclick="copyText(this, '[NO_REKENING]')" class="px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-medium hover:bg-primary-hover transition flex items-center gap-1.5 flex-shrink-0">
+                    <span class="font-mono font-bold text-primary text-base select-all">0100515393100</span>
+                    <button onclick="copyText(this, '0100515393100')" class="px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-medium hover:bg-primary-hover transition flex items-center gap-1.5 flex-shrink-0">
                         <i class="fas fa-copy"></i> Salin
                     </button>
                 </div>
-                <p class="text-xs text-text-subtle">a.n. <span class="font-semibold text-text-main">[NAMA_PEMILIK]</span></p>
+                <p class="text-xs text-text-subtle">a.n. <span class="font-semibold text-text-main">SURATININGSIH</span></p>
             </div>
         </div>
         <div class="px-6 pb-6">
@@ -361,36 +404,6 @@ function copyRekening(btn) {
     </div>
 </div>
 
-<!-- ========== MODAL QRIS / E-WALLET ========== -->
-<div id="modalQRIS" class="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center hidden p-4" onclick="closeModalQRIS(event)">
-    <div class="bg-surface rounded-3xl max-w-sm w-full shadow-2xl border border-border-subtle/20 overflow-hidden text-center" onclick="event.stopPropagation()">
-        <div class="flex items-center justify-between p-6 border-b border-border-subtle/20">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-green-500/20">
-                    <i class="fas fa-qrcode text-sm"></i>
-                </div>
-                <h3 class="font-bold text-text-main">QRIS / E-Wallet</h3>
-            </div>
-            <button onclick="closeModalQRIS()" class="w-8 h-8 rounded-full bg-background hover:bg-secondary-light flex items-center justify-center text-text-muted hover:text-text-main transition-all duration-200">
-                <i class="fas fa-times text-sm"></i>
-            </button>
-        </div>
-        <div class="p-8">
-            <div class="w-56 h-56 mx-auto bg-surface rounded-2xl border-2 border-border-subtle/30 flex items-center justify-center overflow-hidden shadow-sm mb-4 p-3">
-                <?php if (file_exists(FCPATH . 'assets/img/qris.png')): ?>
-                <img src="<?php echo base_url('assets/img/qris.png'); ?>" alt="QRIS NINGNONG" class="w-full h-full object-contain">
-                <?php else: ?>
-                <div class="text-center text-text-subtle">
-                    <i class="fas fa-qrcode text-5xl mb-2"></i>
-                    <p class="text-xs">QRIS akan ditampilkan di sini</p>
-                </div>
-                <?php endif; ?>
-            </div>
-            <p class="text-sm text-text-muted">Scan QRIS untuk pembayaran</p>
-            <p class="text-xs text-text-subtle mt-1">Gunakan GoPay, OVO, DANA, atau M-Banking</p>
-        </div>
-    </div>
-</div>
 
 <!-- Toast untuk feedback copy -->
 <div id="toast-copy" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[99999] bg-text-main text-white px-5 py-3 rounded-2xl shadow-lg text-sm font-medium flex items-center gap-2 opacity-0 translate-y-4 transition-all duration-300 pointer-events-none">
@@ -408,17 +421,8 @@ function closeModalTransfer(e) {
     document.getElementById('modalTransfer').classList.add('hidden');
     document.body.style.overflow = '';
 }
-function openModalQRIS() {
-    document.getElementById('modalQRIS').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-function closeModalQRIS(e) {
-    if (e && e.target !== e.currentTarget) return;
-    document.getElementById('modalQRIS').classList.add('hidden');
-    document.body.style.overflow = '';
-}
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') { closeModalTransfer(); closeModalQRIS(); }
+    if (e.key === 'Escape') { closeModalTransfer(); }
 });
 function showCopyToast(msg) {
     const toast = document.getElementById('toast-copy');
@@ -460,14 +464,61 @@ document.addEventListener('DOMContentLoaded', function() {
         label.addEventListener('click', function() {
             const metode = this.dataset.metode;
             const radio = this.querySelector('.metode-radio');
-            if (radio) radio.checked = true;
+            if (radio) {
+                radio.checked = true;
+                // Set checked secara manual via JS TIDAK memicu event 'change' bawaan browser,
+                // padahal validasi bukti pembayaran (wajib/tidak) nempel di event 'change'.
+                // Dispatch manual di sini supaya validasi selalu ke-refresh tiap ganti metode pembayaran.
+                radio.dispatchEvent(new Event('change', { bubbles: true }));
+            }
             if (metode === 'transfer') {
                 setTimeout(openModalTransfer, 150);
-            } else if (metode === 'ewallet') {
-                setTimeout(openModalQRIS, 150);
             }
         });
     });
+});
+</script>
+
+<script>
+<?php $session_referrer = $this->session->userdata('order_referrer'); ?>
+var __CHECKOUT_REFERRER__ = "<?= $session_referrer ? addslashes($session_referrer) : base_url('catering') ?>";
+
+function __goBackToReferrer() {
+    try { sessionStorage.removeItem('checkout_pending_wa'); } catch(e) {}
+    window.location.replace(__CHECKOUT_REFERRER__);
+}
+
+// Mekanisme 1: restore dari bfcache — pageshow + popstate
+window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+        __goBackToReferrer();
+    }
+});
+window.addEventListener('popstate', function () {
+    __goBackToReferrer();
+});
+
+// Mekanisme 2: sessionStorage flag — BEKERJA TANPA BFCACHE.
+// Flag diset saat form di-submit (lihat handler di bawah).
+// Setiap kali halaman checkout dimuat (fresh/cache), cek flag.
+// Kalau ketemu, berarti user baru saja checkout lalu back — langsung redirect.
+document.addEventListener('DOMContentLoaded', function () {
+    try {
+        if (sessionStorage.getItem('checkout_pending_wa') === '1') {
+            sessionStorage.removeItem('checkout_pending_wa');
+            __goBackToReferrer();
+        }
+    } catch(e) {}
+});
+
+// Set sessionStorage flag SEBELUM form di-submit (menuju WhatsApp)
+document.addEventListener('DOMContentLoaded', function () {
+    var form = document.querySelector('form[action*="checkout_umum/proses"]');
+    if (form) {
+        form.addEventListener('submit', function () {
+            try { sessionStorage.setItem('checkout_pending_wa', '1'); } catch(e) {}
+        });
+    }
 });
 </script>
 

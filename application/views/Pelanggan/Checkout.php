@@ -56,7 +56,7 @@
                                 <input type="radio" name="metode_pembayaran" value="Transfer Bank" checked class="w-5 h-5 text-primary accent-primary metode-radio">
                                 <div class="flex-1">
                                     <p class="font-semibold text-text-main group-hover:text-primary transition-colors duration-200">Transfer Bank</p>
-                                    <p class="text-sm text-text-muted">BCA / Mandiri / BNI</p>
+                                    <p class="text-sm text-text-muted">BJB</p>
                                 </div>
                                 <i class="fas fa-university text-border-subtle group-hover:text-primary transition-colors duration-200"></i>
                             </label>
@@ -162,16 +162,16 @@
                         <i class="fas fa-university text-sm"></i>
                     </div>
                     <div>
-                        <p class="font-semibold text-text-main text-sm">[NAMA_BANK]</p>
+                        <p class="font-semibold text-text-main text-sm">BJB</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between bg-surface rounded-xl px-4 py-3 border border-border-subtle/20 mb-3">
-                    <span class="font-mono font-bold text-primary text-base select-all">[NO_REKENING]</span>
-                    <button onclick="copyText(this, '[NO_REKENING]')" class="px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-medium hover:bg-primary-hover transition flex items-center gap-1.5 flex-shrink-0">
+                    <span class="font-mono font-bold text-primary text-base select-all">0100515393100</span>
+                    <button onclick="copyText(this, '0100515393100')" class="px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-medium hover:bg-primary-hover transition flex items-center gap-1.5 flex-shrink-0">
                         <i class="fas fa-copy"></i> Salin
                     </button>
                 </div>
-                <p class="text-xs text-text-subtle">a.n. <span class="font-semibold text-text-main">[NAMA_PEMILIK]</span></p>
+                <p class="text-xs text-text-subtle">a.n. <span class="font-semibold text-text-main">SURATININGSIH</span></p>
             </div>
         </div>
         <!-- Footer -->
@@ -181,38 +181,7 @@
     </div>
 </div>
 
-<!-- ========== MODAL QRIS / E-WALLET ========== -->
-<div id="modalQRIS" class="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center hidden p-4" onclick="closeModalQRIS(event)">
-    <div class="bg-surface rounded-3xl max-w-sm w-full shadow-2xl border border-border-subtle/20 overflow-hidden text-center" onclick="event.stopPropagation()">
-        <!-- Header -->
-        <div class="flex items-center justify-between p-6 border-b border-border-subtle/20">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-green-500/20">
-                    <i class="fas fa-qrcode text-sm"></i>
-                </div>
-                <h3 class="font-bold text-text-main">QRIS / E-Wallet</h3>
-            </div>
-            <button onclick="closeModalQRIS()" class="w-8 h-8 rounded-full bg-background hover:bg-secondary-light flex items-center justify-center text-text-muted hover:text-text-main transition-all duration-200">
-                <i class="fas fa-times text-sm"></i>
-            </button>
-        </div>
-        <!-- Body: QR Code -->
-        <div class="p-8">
-            <div class="w-56 h-56 mx-auto bg-surface rounded-2xl border-2 border-border-subtle/30 flex items-center justify-center overflow-hidden shadow-sm mb-4 p-3">
-                <?php if (file_exists(FCPATH . 'assets/img/qris.png')): ?>
-                <img src="<?php echo base_url('assets/img/qris.png'); ?>" alt="QRIS NINGNONG" class="w-full h-full object-contain">
-                <?php else: ?>
-                <div class="text-center text-text-subtle">
-                    <i class="fas fa-qrcode text-5xl mb-2"></i>
-                    <p class="text-xs">QRIS akan ditampilkan di sini</p>
-                </div>
-                <?php endif; ?>
-            </div>
-            <p class="text-sm text-text-muted">Scan QRIS untuk pembayaran</p>
-            <p class="text-xs text-text-subtle mt-1">Gunakan GoPay, OVO, DANA, atau M-Banking</p>
-        </div>
-    </div>
-</div>
+
 
 <!-- Toast untuk feedback copy -->
 <div id="toast-copy" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[99999] bg-text-main text-white px-5 py-3 rounded-2xl shadow-lg text-sm font-medium flex items-center gap-2 opacity-0 translate-y-4 transition-all duration-300 pointer-events-none">
@@ -235,20 +204,8 @@ function closeModalTransfer(e) {
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeModalTransfer();
-        closeModalQRIS();
     }
 });
-
-// ===== MODAL QRIS =====
-function openModalQRIS() {
-    document.getElementById('modalQRIS').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-function closeModalQRIS(e) {
-    if (e && e.target !== e.currentTarget) return;
-    document.getElementById('modalQRIS').classList.add('hidden');
-    document.body.style.overflow = '';
-}
 
 // ===== TOAST COPY =====
 function showCopyToast(msg) {
@@ -300,10 +257,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (metode === 'transfer') {
                 setTimeout(openModalTransfer, 150);
-            } else if (metode === 'ewallet') {
-                setTimeout(openModalQRIS, 150);
             }
-            // COD: no modal, just select
+            // COD / E-Wallet: no modal, just select
         });
     });
 });

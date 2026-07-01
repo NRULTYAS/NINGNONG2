@@ -92,7 +92,7 @@
                                 <i class="fas fa-hand-holding-usd text-border-subtle group-hover:text-primary transition-colors duration-200"></i>
                             </label>
                             <label class="flex items-center gap-4 p-4 rounded-xl border border-border-subtle/30 cursor-pointer hover:bg-background/50 hover:border-primary/30 transition-all duration-200 group" data-metode="ewallet">
-                                <input type="radio" name="metode_pembayaran" value="E-Wallet" class="w-5 h-5 text-primary accent-primary metode-radio">
+                                <input type="radio" name="metode_pembayaran" value="QRIS" class="w-5 h-5 text-primary accent-primary metode-radio">
                                 <div class="flex-1">
                                     <p class="font-semibold text-text-main group-hover:text-primary transition-colors duration-200">E-Wallet / QRIS</p>
                                     <p class="text-sm text-text-muted">Dana / OVO / GoPay / M-Banking</p>
@@ -100,6 +100,40 @@
                                 <i class="fas fa-mobile-alt text-border-subtle group-hover:text-primary transition-colors duration-200"></i>
                             </label>
                         </div>
+
+                    <!-- QRIS Image - tampil hanya saat metode QRIS/E-Wallet dipilih -->
+                    <div id="qrisContainer" class="mt-5 text-center" style="display:none;">
+                        <div style="display:inline-block; border:1px solid #ddd; border-radius:8px; padding:8px; background:#fff;">
+                            <img src="<?= base_url('assets/img/qris.jpeg') ?>" alt="QRIS Pembayaran" style="max-width:300px; width:100%; height:auto; display:block; margin:0 auto;">
+                        </div>
+                        <p class="text-xs text-text-subtle mt-2">Scan QRIS berikut untuk melakukan pembayaran</p>
+                    </div>
+                    </div>
+
+                    <!-- Bukti Pembayaran -->
+                    <div class="bg-surface/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-border-subtle/20 shadow-sm" id="bukti-section">
+                        <h3 class="font-bold text-text-main mb-4 text-lg flex items-center gap-3 font-heading">
+                            <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+                                <i class="fas fa-upload text-sm"></i>
+                            </div>
+                            Bukti Pembayaran
+                        </h3>
+                        <p id="bukti-label" class="text-xs text-red-500 font-medium mt-1 mb-3">* Wajib dilampirkan untuk metode Transfer / QRIS</p>
+                        <div class="border-2 border-dashed border-primary/30 rounded-xl p-6 text-center hover:border-primary/40 transition-colors duration-200 bg-background/20">
+                            <input type="file" name="bukti_pembayaran" accept="image/*" class="hidden" id="bukti-upload">
+                            <label for="bukti-upload" class="cursor-pointer flex flex-col items-center">
+                                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                                    <i class="fas fa-cloud-upload-alt text-primary text-xl"></i>
+                                </div>
+                                <p class="text-sm font-medium text-text-main">Klik untuk upload bukti pembayaran</p>
+                                <p class="text-xs text-text-subtle mt-1">JPG, PNG, WEBP (Max 2MB)</p>
+                            </label>
+                            <div id="file-preview" class="mt-3 hidden">
+                                <img id="preview-img" src="" alt="Preview" class="max-h-32 mx-auto rounded-lg border border-border-subtle/20">
+                                <p id="file-name" class="text-xs text-text-subtle mt-1"></p>
+                            </div>
+                        </div>
+                        <p id="bukti-error" class="text-xs text-red-500 mt-2 hidden">Bukti pembayaran wajib dilampirkan untuk metode Transfer/QRIS.</p>
                     </div>
 
                     <!-- Catatan -->
@@ -192,7 +226,7 @@
                             <span class="font-extrabold text-2xl text-primary" id="total-pembayaran">Rp <?php echo number_format($total_box * 15, 0, ',', '.'); ?></span>
                         </div>
                     </div>
-                    <button type="submit" class="block w-full py-3.5 bg-primary text-white rounded-full font-medium hover:bg-primary-hover transition-all duration-200 text-center flex items-center justify-center gap-2 shadow-md shadow-primary/20">
+                    <button type="submit" id="btn-submit-box" class="block w-full py-3.5 bg-primary text-white rounded-full font-medium hover:bg-primary-hover transition-all duration-200 text-center flex items-center justify-center gap-2 shadow-md shadow-primary/20">
                         <i class="fas fa-check-circle text-sm"></i> Konfirmasi Pesanan
                     </button>
                     <a href="<?php echo base_url('pesanan/snack_box_builder'); ?>" class="block w-full py-3 text-primary rounded-full font-medium hover:bg-background/80 transition-all duration-200 text-center mt-2 text-sm">
@@ -213,7 +247,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalDusFooter = document.getElementById('total-dus-footer');
     const totalPembayaranEl = document.getElementById('total-pembayaran');
     const errorEl = document.getElementById('error-jumlah-dus');
-    const btnSubmit = document.querySelector('button[type="submit"]');
+    const btnSubmit = document.getElementById('btn-submit-box');
+
+    // Upload elements
+    const fileInput = document.getElementById('bukti-upload');
+    const filePreview = document.getElementById('file-preview');
+    const previewImg = document.getElementById('preview-img');
+    const fileName = document.getElementById('file-name');
+    const buktiError = document.getElementById('bukti-error');
+    const buktiLabel = document.getElementById('bukti-label');
 
     function updateTotal() {
         const jumlah = parseInt(inputJumlah.value) || 0;
@@ -231,14 +273,113 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             errorEl.classList.add('hidden');
             inputJumlah.classList.remove('border-red-400');
+            validateForm();
+        }
+    }
+
+    function validateForm() {
+        const jumlah = parseInt(inputJumlah.value) || 0;
+        const metode = document.querySelector('input[name="metode_pembayaran"]:checked');
+        const metodeVal = metode ? metode.value : '';
+
+        let valid = true;
+
+        // Validasi jumlah minimal
+        if (jumlah < 15) {
+            valid = false;
+        }
+
+        // Validasi bukti pembayaran untuk Transfer / QRIS
+        const isPaidMethod = (metodeVal === 'Transfer Bank' || metodeVal === 'QRIS' || metodeVal === 'E-Wallet');
+        const hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
+
+        if (isPaidMethod && !hasFile) {
+            valid = false;
+            buktiError.classList.remove('hidden');
+            buktiLabel.classList.remove('hidden');
+        } else {
+            buktiError.classList.add('hidden');
+            if (isPaidMethod) {
+                buktiLabel.classList.remove('hidden');
+            } else {
+                buktiLabel.classList.add('hidden');
+            }
+        }
+
+        if (valid) {
             btnSubmit.disabled = false;
             btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else {
+            btnSubmit.disabled = true;
+            btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
         }
     }
 
     if (inputJumlah) {
         inputJumlah.addEventListener('input', updateTotal);
         updateTotal();
+    }
+
+    // Toggle QRIS image based on selected payment method
+    const qrisContainer = document.getElementById('qrisContainer');
+
+    function toggleQRIS() {
+        const metode = document.querySelector('input[name="metode_pembayaran"]:checked');
+        if (metode && (metode.value === 'QRIS' || metode.value === 'E-Wallet')) {
+            qrisContainer.style.display = 'block';
+        } else {
+            qrisContainer.style.display = 'none';
+        }
+    }
+
+    // Reactive payment method change
+    document.querySelectorAll('input[name="metode_pembayaran"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            validateForm();
+            toggleQRIS();
+        });
+    });
+    toggleQRIS();
+
+    // File upload preview + validation
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    fileName.textContent = file.name;
+                    filePreview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+            validateForm();
+        });
+    }
+
+    // Initial validation
+    setTimeout(validateForm, 100);
+});
+
+// Override form submit to check bukti pembayaran
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form[action*="box_checkout/proses"]');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const metode = document.querySelector('input[name="metode_pembayaran"]:checked');
+            const metodeVal = metode ? metode.value : '';
+            const fileInput = document.getElementById('bukti-upload');
+
+            const isPaidMethod = (metodeVal === 'Transfer Bank' || metodeVal === 'QRIS' || metodeVal === 'E-Wallet');
+            const hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
+
+            if (isPaidMethod && !hasFile) {
+                e.preventDefault();
+                alert('Bukti pembayaran wajib dilampirkan untuk metode Transfer/QRIS.');
+                return false;
+            }
+        });
     }
 });
 </script>
@@ -267,51 +408,20 @@ document.addEventListener('DOMContentLoaded', function() {
                         <i class="fas fa-university text-sm"></i>
                     </div>
                     <div>
-                        <p class="font-semibold text-text-main text-sm">[NAMA_BANK]</p>
+                        <p class="font-semibold text-text-main text-sm">BJB</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between bg-surface rounded-xl px-4 py-3 border border-border-subtle/20 mb-3">
-                    <span class="font-mono font-bold text-primary text-base select-all">[NO_REKENING]</span>
-                    <button onclick="copyText(this, '[NO_REKENING]')" class="px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-medium hover:bg-primary-hover transition flex items-center gap-1.5 flex-shrink-0">
+                    <span class="font-mono font-bold text-primary text-base select-all">0100515393100</span>
+                    <button onclick="copyText(this, '0100515393100')" class="px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-medium hover:bg-primary-hover transition flex items-center gap-1.5 flex-shrink-0">
                         <i class="fas fa-copy"></i> Salin
                     </button>
                 </div>
-                <p class="text-xs text-text-subtle">a.n. <span class="font-semibold text-text-main">[NAMA_PEMILIK]</span></p>
+                <p class="text-xs text-text-subtle">a.n. <span class="font-semibold text-text-main">SURATININGSIH</span></p>
             </div>
         </div>
         <div class="px-6 pb-6">
             <p class="text-xs text-text-subtle text-center">* Silakan transfer sesuai total pembayaran dan upload bukti transfer</p>
-        </div>
-    </div>
-</div>
-
-<!-- ========== MODAL QRIS / E-WALLET ========== -->
-<div id="modalQRIS" class="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center hidden p-4" onclick="closeModalQRIS(event)">
-    <div class="bg-surface rounded-3xl max-w-sm w-full shadow-2xl border border-border-subtle/20 overflow-hidden text-center" onclick="event.stopPropagation()">
-        <div class="flex items-center justify-between p-6 border-b border-border-subtle/20">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-green-500/20">
-                    <i class="fas fa-qrcode text-sm"></i>
-                </div>
-                <h3 class="font-bold text-text-main">QRIS / E-Wallet</h3>
-            </div>
-            <button onclick="closeModalQRIS()" class="w-8 h-8 rounded-full bg-background hover:bg-secondary-light flex items-center justify-center text-text-muted hover:text-text-main transition-all duration-200">
-                <i class="fas fa-times text-sm"></i>
-            </button>
-        </div>
-        <div class="p-8">
-            <div class="w-56 h-56 mx-auto bg-surface rounded-2xl border-2 border-border-subtle/30 flex items-center justify-center overflow-hidden shadow-sm mb-4 p-3">
-                <?php if (file_exists(FCPATH . 'assets/img/qris.png')): ?>
-                <img src="<?php echo base_url('assets/img/qris.png'); ?>" alt="QRIS NINGNONG" class="w-full h-full object-contain">
-                <?php else: ?>
-                <div class="text-center text-text-subtle">
-                    <i class="fas fa-qrcode text-5xl mb-2"></i>
-                    <p class="text-xs">QRIS akan ditampilkan di sini</p>
-                </div>
-                <?php endif; ?>
-            </div>
-            <p class="text-sm text-text-muted">Scan QRIS untuk pembayaran</p>
-            <p class="text-xs text-text-subtle mt-1">Gunakan GoPay, OVO, DANA, atau M-Banking</p>
         </div>
     </div>
 </div>
@@ -332,17 +442,8 @@ function closeModalTransfer(e) {
     document.getElementById('modalTransfer').classList.add('hidden');
     document.body.style.overflow = '';
 }
-function openModalQRIS() {
-    document.getElementById('modalQRIS').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-function closeModalQRIS(e) {
-    if (e && e.target !== e.currentTarget) return;
-    document.getElementById('modalQRIS').classList.add('hidden');
-    document.body.style.overflow = '';
-}
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') { closeModalTransfer(); closeModalQRIS(); }
+    if (e.key === 'Escape') { closeModalTransfer(); }
 });
 function showCopyToast(msg) {
     const toast = document.getElementById('toast-copy');
@@ -387,8 +488,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (radio) radio.checked = true;
             if (metode === 'transfer') {
                 setTimeout(openModalTransfer, 150);
-            } else if (metode === 'ewallet') {
-                setTimeout(openModalQRIS, 150);
             }
         });
     });

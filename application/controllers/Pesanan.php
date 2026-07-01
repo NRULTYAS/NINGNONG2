@@ -201,7 +201,8 @@ class Pesanan extends CI_Controller {
                 'item_id' => $pid,
                 'product_id' => $pid,
                 'quantity' => $quantity,
-                'subtotal' => $subtotal
+                'subtotal' => $subtotal,
+                'nama_produk' => $productRows[$pid]->nama_produk ?? 'Item #'.$pid
             ];
 
             $total_box += $subtotal;

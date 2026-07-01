@@ -1,105 +1,169 @@
 <?php $this->load->view('templates/header_admin'); ?>
 
 <div class="flex items-center gap-3 py-6">
-    <div class="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center text-white shadow-md shadow-secondary/20">
-        <i class="fas fa-chart-line text-lg"></i>
+    <div class="w-12 h-12 rounded-2xl bg-accent flex items-center justify-center text-white shadow-md shadow-accent/20">
+        <i class="fas fa-file-invoice-dollar text-lg"></i>
     </div>
     <div>
         <h1 class="text-2xl font-bold text-primary font-heading">Laporan Penjualan</h1>
-        <p class="text-text-muted">Lihat laporan penjualan berdasarkan periode</p>
+        <p class="text-text-muted">Ringkasan pesanan berdasarkan rentang tanggal</p>
     </div>
 </div>
 
-<div class="bg-surface rounded-2xl shadow-sm border border-border-subtle p-6 mb-8">
-    <form action="<?php echo base_url('admin/laporan'); ?>" method="get" class="flex flex-wrap gap-6 items-end">
-        <div class="flex-1 min-w-[200px]">
-            <label class="block text-sm font-semibold text-text-main mb-2 flex items-center gap-2">
-                <div class="w-5 h-5 rounded-md bg-primary flex items-center justify-center text-white text-[10px]"><i class="fas fa-calendar-alt"></i></div>
-                Dari Tanggal
-            </label>
-            <input type="date" name="dari" value="<?php echo $dari; ?>" required class="w-full px-4 py-3 rounded-xl border border-border-subtle focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-surface shadow-sm transition">
+<div class="bg-surface rounded-2xl shadow-sm border border-border-subtle p-6 mb-6">
+    <form method="get" action="<?php echo base_url('admin/laporan'); ?>" class="flex flex-col sm:flex-row items-end gap-3">
+        <div class="flex-1 w-full">
+            <label class="block text-sm font-medium text-text-main mb-1.5">Dari Tanggal</label>
+            <input type="date" name="dari" value="<?php echo $dari ?? ''; ?>" required class="w-full px-4 py-2.5 rounded-xl border border-border-subtle focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-background/30 transition-colors duration-200">
         </div>
-        <div class="flex-1 min-w-[200px]">
-            <label class="block text-sm font-semibold text-text-main mb-2 flex items-center gap-2">
-                <div class="w-5 h-5 rounded-md bg-primary flex items-center justify-center text-white text-[10px]"><i class="fas fa-calendar-check"></i></div>
-                Sampai Tanggal
-            </label>
-            <input type="date" name="sampai" value="<?php echo $sampai; ?>" required class="w-full px-4 py-3 rounded-xl border border-border-subtle focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-surface shadow-sm transition">
+        <div class="flex-1 w-full">
+            <label class="block text-sm font-medium text-text-main mb-1.5">Sampai Tanggal</label>
+            <input type="date" name="sampai" value="<?php echo $sampai ?? ''; ?>" required class="w-full px-4 py-2.5 rounded-xl border border-border-subtle focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-background/30 transition-colors duration-200">
         </div>
-        <button type="submit" class="px-6 py-3 bg-primary text-white rounded-xl font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] transition-all flex items-center gap-2">
-            <i class="fas fa-search"></i> Tampilkan
+        <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-primary text-white rounded-xl font-medium hover:bg-primary-hover transition-all duration-200 flex items-center justify-center gap-2 shadow-md shadow-primary/20">
+            <i class="fas fa-search text-sm"></i> Tampilkan
         </button>
     </form>
 </div>
 
-<?php if($dari && $sampai): ?>
-
+<?php if (isset($dari) && isset($sampai) && $dari && $sampai): ?>
 <div class="bg-surface rounded-2xl shadow-sm border border-border-subtle overflow-hidden">
-
-<?php if(!empty($laporan)): ?>
-
-<?php endif; ?>
-    <div class="p-6 border-b border-border-subtle flex justify-between items-center bg-accent-light/50">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-white shadow-md">
-                <i class="fas fa-file-invoice"></i>
-            </div>
-            <h3 class="font-heading font-bold text-lg text-primary">Hasil Laporan</h3>
-        </div>
-        <span class="text-sm text-text-muted bg-surface px-3 py-1 rounded-lg border border-border-subtle shadow-sm">
-            <?php echo date('d M Y', strtotime($dari)); ?> - <?php echo date('d M Y', strtotime($sampai)); ?>
-        </span>
-    </div>
-
-    <?php if(empty($laporan)): ?>
-    <div class="py-16 text-center">
-        <div class="w-20 h-20 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
-            <i class="fas fa-file-invoice text-3xl text-primary/40"></i>
-        </div>
-        <p class="text-text-muted font-medium">Tidak ada data penjualan pada periode ini</p>
-    </div>
-    <?php else: ?>
     <div class="overflow-x-auto">
         <table class="w-full text-left">
             <thead>
                 <tr class="bg-accent-light">
-                    <th class="px-6 py-4 font-semibold text-text-main">Kode Pesanan</th>
+                    <th class="px-6 py-4 font-semibold text-text-main">Kode</th>
                     <th class="px-6 py-4 font-semibold text-text-main">Pelanggan</th>
                     <th class="px-6 py-4 font-semibold text-text-main">Total</th>
+                    <th class="px-6 py-4 font-semibold text-text-main">Metode</th>
+                    <th class="px-6 py-4 font-semibold text-text-main">Bukti Pembayaran</th>
                     <th class="px-6 py-4 font-semibold text-text-main">Status</th>
                     <th class="px-6 py-4 font-semibold text-text-main">Tanggal</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-border-subtle">
-                <?php 
-                $total_semua = 0;
-                foreach($laporan as $l): 
-                    $total_semua += $l->total_harga;
-                ?>
-                <tr class="hover:bg-accent-light/40 transition">
-                    <td class="px-6 py-4 font-bold text-primary"><?php echo $l->kode_pesanan; ?></td>
-                    <td class="px-6 py-4 text-text-muted"><?php echo $l->nama_penerima; ?></td>
-                    <td class="px-6 py-4 font-bold text-primary">Rp <?php echo number_format($l->total_harga,0,',','.'); ?></td>
-                    <td class="px-6 py-4">
-                        <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold border bg-secondary-light text-secondary border-border-subtle">
-                            <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                            <?php echo ucfirst($l->status); ?>
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 text-text-subtle text-sm"><?php echo date('d M Y H:i', strtotime($l->created_at)); ?></td>
-                </tr>
-                <?php endforeach; ?>
+                <?php if (!empty($laporan)): ?>
+                    <?php foreach($laporan as $p): ?>
+                    <tr class="hover:bg-accent-light/40 transition">
+                        <td class="px-6 py-4 font-bold text-primary"><?php echo $p->kode_pesanan; ?></td>
+                        <td class="px-6 py-4 text-text-muted">
+                            <p class="font-semibold text-text-main"><?php echo $p->nama_penerima; ?></p>
+                            <p class="text-sm text-text-subtle"><?php echo $p->no_hp_penerima; ?></p>
+                        </td>
+                        <td class="px-6 py-4 font-bold text-primary">Rp <?php echo number_format($p->total_harga,0,',','.'); ?></td>
+                        <td class="px-6 py-4 text-text-muted">
+                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium bg-accent-light border border-border-subtle">
+                                <i class="fas fa-wallet text-primary/60"></i> <?php echo $p->metode_pembayaran; ?>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <?php if (!empty($p->bukti_pembayaran)): ?>
+                                <?php
+                                    $filePath = FCPATH . 'assets/upload/' . $p->bukti_pembayaran;
+                                    $fileUrl = base_url('assets/upload/' . $p->bukti_pembayaran);
+                                    $fileExists = file_exists($filePath);
+                                ?>
+                                <?php if ($fileExists): ?>
+                                    <img 
+                                        src="<?php echo $fileUrl; ?>" 
+                                        alt="Bukti Pembayaran" 
+                                        class="w-[70px] h-[70px] object-cover rounded-lg border border-border-subtle cursor-pointer hover:opacity-80 transition-opacity"
+                                        onclick="openBuktiModal('<?php echo $fileUrl; ?>', '<?php echo htmlspecialchars($p->kode_pesanan, ENT_QUOTES); ?>')"
+                                        title="Klik untuk memperbesar"
+                                    >
+                                <?php else: ?>
+                                    <span class="text-xs text-red-500">File tidak ditemukan</span>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <span class="text-xs text-text-subtle">Tidak ada bukti</span>
+                            <?php endif; ?>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold border
+                                <?php 
+                                switch($p->status) {
+                                    case 'pending': echo 'bg-accent-light text-accent border-accent-light'; break;
+                                    case 'diproses': echo 'bg-secondary-light text-secondary border-border-subtle'; break;
+                                    case 'dikirim': echo 'bg-purple-50 text-purple-600 border-purple-100'; break;
+                                    case 'selesai': echo 'bg-secondary-light text-secondary border-border-subtle'; break;
+                                    case 'dibatalkan': echo 'bg-red-50 text-red-700 border-red-200'; break;
+                                }
+                                ?>">
+                                <span class="w-1.5 h-1.5 rounded-full
+                                    <?php 
+                                    switch($p->status) {
+                                        case 'pending': echo 'bg-accent'; break;
+                                        case 'diproses': echo 'bg-secondary'; break;
+                                        case 'dikirim': echo 'bg-purple-500'; break;
+                                        case 'selesai': echo 'bg-secondary'; break;
+                                        case 'dibatalkan': echo 'bg-red-500'; break;
+                                    }
+                                    ?>"></span>
+                                <?php echo ucfirst($p->status); ?>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-text-subtle text-sm"><?php echo date('d M Y', strtotime($p->created_at)); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7" class="px-6 py-12 text-center text-text-muted">Tidak ada data laporan untuk rentang tanggal ini</td>
+                    </tr>
+                <?php endif; ?>
             </tbody>
-            <tfoot>
-                <tr class="bg-primary text-white">
-                    <td colspan="2" class="px-6 py-5 text-right font-semibold">Total Penjualan:</td>
-                    <td colspan="3" class="px-6 py-5 text-xl font-bold">Rp <?php echo number_format($total_semua,0,',','.'); ?></td>
-                </tr>
-            </tfoot>
         </table>
     </div>
-    <?php endif; ?>
 </div>
 <?php endif; ?>
+
+<!-- Modal Bukti Pembayaran -->
+<div id="buktiModal" class="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4" onclick="closeBuktiModal(event)">
+    <div class="bg-surface rounded-3xl max-w-lg w-full shadow-2xl border border-border-subtle/20 overflow-hidden" onclick="event.stopPropagation()">
+        <div class="flex items-center justify-between p-6 border-b border-border-subtle/20">
+            <div>
+                <h3 class="font-bold text-text-main font-heading">Bukti Pembayaran</h3>
+                <p id="buktiModalKode" class="text-xs text-text-subtle"></p>
+            </div>
+            <div class="flex items-center gap-2">
+                <a id="buktiModalLink" href="#" target="_blank" class="px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-medium hover:bg-primary-hover transition flex items-center gap-1.5">
+                    <i class="fas fa-external-link-alt"></i> Buka Tab Baru
+                </a>
+                <button onclick="closeBuktiModal()" class="w-8 h-8 rounded-full bg-background hover:bg-secondary-light flex items-center justify-center text-text-muted hover:text-text-main transition-all duration-200">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-6 text-center">
+            <img id="buktiModalImg" src="" alt="Bukti Pembayaran" class="max-w-full max-h-[60vh] mx-auto rounded-xl border border-border-subtle/20 shadow-sm">
+        </div>
+    </div>
+</div>
+
+<script>
+function openBuktiModal(url, kode) {
+    const modal = document.getElementById('buktiModal');
+    const img = document.getElementById('buktiModalImg');
+    const kodeEl = document.getElementById('buktiModalKode');
+    const link = document.getElementById('buktiModalLink');
+    img.src = url;
+    kodeEl.textContent = 'Kode Pesanan: ' + kode;
+    link.href = url;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeBuktiModal(e) {
+    if (e && e.target !== e.currentTarget) return;
+    const modal = document.getElementById('buktiModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeBuktiModal(); }
+});
+</script>
 
 <?php $this->load->view('templates/footer_admin'); ?>

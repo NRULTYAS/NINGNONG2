@@ -15,6 +15,7 @@ class Box_checkout extends CI_Controller {
         }
         $this->load->model('produk_model');
         $this->load->model('pesanan_model');
+        $this->load->library('upload');
     }
 
     public function index()
@@ -138,6 +139,13 @@ class Box_checkout extends CI_Controller {
             redirect('pesanan/snack_box_builder');
         }
 
+        // Ambil metode pembayaran
+        $metode = $this->input->post('metode_pembayaran', TRUE);
+        if (empty($metode)) {
+            $this->session->set_flashdata('error', 'Metode pembayaran harus dipilih');
+            redirect('box_checkout');
+        }
+
         // Hitung total
         $productIds = array_keys($state['active_box_items']);
         $productRows = [];
@@ -184,16 +192,44 @@ class Box_checkout extends CI_Controller {
         $tanggal_kirim = $this->input->post('tanggal_kirim', TRUE);
         $catatan = $this->input->post('catatan', TRUE);
 
-        // Upload bukti pembayaran (opsional)
+        // Validasi bukti pembayaran untuk Transfer / QRIS (bukan COD)
+        $is_paid_method = in_array(strtolower($metode), ['transfer bank', 'qris', 'e-wallet']);
         $bukti_pembayaran = null;
-        if (!empty($_FILES['bukti_pembayaran']['name'])) {
+
+        if ($is_paid_method) {
+            if (empty($_FILES['bukti_pembayaran']['name'])) {
+                $this->session->set_flashdata('error', 'Bukti pembayaran wajib dilampirkan untuk metode Transfer/QRIS.');
+                redirect('box_checkout');
+            }
+            // Upload
             $config['upload_path'] = FCPATH . 'assets/upload/';
             $config['allowed_types'] = 'jpg|jpeg|png|webp';
             $config['max_size'] = 2048;
-            $config['file_name'] = 'bukti_' . time() . '_' . $_FILES['bukti_pembayaran']['name'];
-            $this->load->library('upload', $config);
+            $config['file_name'] = 'bukti_' . time() . '_' . rand(100,999);
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0777, true);
+            }
+            $this->upload->initialize($config);
             if ($this->upload->do_upload('bukti_pembayaran')) {
                 $bukti_pembayaran = $this->upload->data('file_name');
+            } else {
+                $this->session->set_flashdata('error', 'Upload bukti pembayaran gagal: ' . $this->upload->display_errors('', ''));
+                redirect('box_checkout');
+            }
+        } else {
+            // COD - upload opsional
+            if (!empty($_FILES['bukti_pembayaran']['name'])) {
+                $config['upload_path'] = FCPATH . 'assets/upload/';
+                $config['allowed_types'] = 'jpg|jpeg|png|webp';
+                $config['max_size'] = 2048;
+                $config['file_name'] = 'bukti_' . time() . '_' . rand(100,999);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0777, true);
+                }
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('bukti_pembayaran')) {
+                    $bukti_pembayaran = $this->upload->data('file_name');
+                }
             }
         }
 
@@ -208,7 +244,7 @@ class Box_checkout extends CI_Controller {
             'alamat_pengiriman' => $this->input->post('alamat', TRUE),
             'total_harga' => $total_harga,
             'status' => 'pending',
-            'metode_pembayaran' => 'QRIS',
+            'metode_pembayaran' => $metode,
             'tanggal_kirim' => $this->input->post('tanggal_kirim', TRUE),
             'catatan' => $this->input->post('catatan', TRUE),
             'detail_box' => json_encode([
@@ -242,17 +278,19 @@ class Box_checkout extends CI_Controller {
         // Hapus state box
         $this->session->unset_userdata('snack_box_state');
 
-        // Build pesan WhatsApp
+        // Build pesan WhatsApp — format dinamis sesuai requirement
+        $metode_label = strtoupper(str_replace('_', ' ', $metode));
+
         $pesan = "Halo NINGNONG Kue Basah,%0A%0A";
         $pesan .= "Saya ingin konfirmasi pesanan *Snack Box* dengan kode: *" . $kode_pesanan . "*%0A%0A";
-        $pesan .= "*Detail Snack Box:*%0A";
+        $pesan .= "*Detail:*%0A";
+        $pesan .= "  • Isi Box:%0A";
         foreach ($detail_items as $item) {
-            $pesan .= "  • {$item['nama_produk']} x{$item['quantity']} (Rp " . number_format($item['subtotal'], 0, ',', '.') . ")%0A";
+            $pesan .= "    - " . $item['nama_produk'] . " x" . $item['quantity'] . "%0A";
         }
-        $pesan .= "%0A*Harga per Dus: Rp " . number_format($harga_per_dus, 0, ',', '.') . "*%0A";
-        $pesan .= "*Jumlah Dus: " . $jumlah_dus . "*%0A";
+        $pesan .= "  • Total Dus: " . $jumlah_dus . "%0A%0A";
+        $pesan .= "*Metode Pembayaran: " . $metode_label . "*%0A";
         $pesan .= "*Total Pembayaran: Rp " . number_format($total_harga, 0, ',', '.') . "*%0A";
-        $pesan .= "Metode Pembayaran: QRIS%0A";
         $pesan .= "Tanggal Kirim: " . date('d/m/Y', strtotime($tanggal_kirim)) . "%0A%0A";
         $pesan .= "*Data Pengiriman:*%0A";
         $pesan .= "Nama: " . $nama_penerima . "%0A";

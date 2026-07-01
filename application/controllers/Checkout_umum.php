@@ -18,6 +18,23 @@ class Checkout_umum extends CI_Controller {
 
     public function index()
     {
+        // Header anti-cache: setiap kali halaman ini diakses (termasuk via tombol Back),
+        // browser HARUS request ulang ke server, bukan pakai bfcache/page cache.
+        $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        $this->output->set_header('Cache-Control: post-check=0, pre-check=0');
+        $this->output->set_header('Pragma: no-cache');
+        $this->output->set_header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+
+        // Kalau user pencet back setelah checkout sukses, balik ke halaman asal (mis. catering), bukan daftar produk
+        if ($this->session->userdata('last_order_success')) {
+            $kode = $this->session->userdata('last_order_success');
+            $tujuan = $this->session->userdata('order_referrer') ?: base_url('produk');
+            $this->session->unset_userdata('last_order_success');
+            $this->session->unset_userdata('order_referrer');
+            $this->session->set_flashdata('success', 'Pesanan #' . $kode . ' sudah berhasil dibuat. Silakan cek WhatsApp untuk konfirmasi pesanan Anda.');
+            redirect($tujuan);
+        }
+
         $order = $this->session->userdata('selected_order');
 
         // Jika belum ada di session, cek parameter GET (untukNyiru)
@@ -40,6 +57,12 @@ class Checkout_umum extends CI_Controller {
         if (!$order || !isset($order['type'])) {
             $this->session->set_flashdata('error', 'Silakan pilih produk terlebih dahulu');
             redirect('produk');
+        }
+
+        // Simpan halaman asal berdasarkan jenis pesanan (bukan dari HTTP_REFERER)
+        // supaya back setelah checkout sukses balik ke landing page, bukan ke halaman kustomisasi.
+        if (!$this->session->userdata('order_referrer')) {
+            $this->session->set_userdata('order_referrer', $this->get_referrer_url($order['type']));
         }
 
         $data['order'] = $order;
@@ -81,6 +104,47 @@ class Checkout_umum extends CI_Controller {
         if ($order['type'] === 'snack_box' && $jumlah < 15) {
             $this->session->set_flashdata('error', 'Minimal pemesanan adalah 15 dus');
             redirect('checkout_umum');
+        }
+
+        // Validasi bukti pembayaran untuk Transfer / QRIS / E-Wallet (bukan COD)
+        $is_paid_method = in_array(strtolower($metode_pembayaran), ['transfer bank', 'qris', 'e-wallet']);
+        $bukti_pembayaran = null;
+
+        if ($is_paid_method) {
+            if (empty($_FILES['bukti_pembayaran']['name'])) {
+                $this->session->set_flashdata('error', 'Bukti pembayaran wajib dilampirkan untuk metode Transfer/QRIS.');
+                redirect('checkout_umum');
+            }
+            // Upload
+            $config['upload_path'] = FCPATH . 'assets/upload/';
+            $config['allowed_types'] = 'jpg|jpeg|png|webp';
+            $config['max_size'] = 2048;
+            $config['file_name'] = 'bukti_' . time() . '_' . rand(100,999);
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0777, true);
+            }
+            $this->upload->initialize($config);
+            if ($this->upload->do_upload('bukti_pembayaran')) {
+                $bukti_pembayaran = $this->upload->data('file_name');
+            } else {
+                $this->session->set_flashdata('error', 'Upload bukti pembayaran gagal: ' . $this->upload->display_errors('', ''));
+                redirect('checkout_umum');
+            }
+        } else {
+            // COD - upload opsional
+            if (!empty($_FILES['bukti_pembayaran']['name'])) {
+                $config['upload_path'] = FCPATH . 'assets/upload/';
+                $config['allowed_types'] = 'jpg|jpeg|png|webp';
+                $config['max_size'] = 2048;
+                $config['file_name'] = 'bukti_' . time() . '_' . rand(100,999);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0777, true);
+                }
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('bukti_pembayaran')) {
+                    $bukti_pembayaran = $this->upload->data('file_name');
+                }
+            }
         }
 
         // Hitung total berdasarkan tipe pesanan
@@ -139,24 +203,6 @@ class Checkout_umum extends CI_Controller {
 
         $kode_pesanan = $this->pesanan_model->generate_kode_pesanan();
 
-        // Upload bukti pembayaran (opsional)
-        $bukti_pembayaran = null;
-        if (!empty($_FILES['bukti_pembayaran']['name'])) {
-            $config['upload_path'] = FCPATH . 'assets/upload/';
-            $config['allowed_types'] = 'jpg|jpeg|png|webp';
-            $config['max_size'] = 2048;
-            $config['file_name'] = 'bukti_' . time() . '_' . rand(100,999);
-
-            if (!is_dir($config['upload_path'])) {
-                mkdir($config['upload_path'], 0777, true);
-            }
-
-            $this->upload->initialize($config);
-            if ($this->upload->do_upload('bukti_pembayaran')) {
-                $bukti_pembayaran = $this->upload->data('file_name');
-            }
-        }
-
         $pesanan = [
             'id_user' => $this->session->userdata('id_user'),
             'jenis_pesanan' => $order['type'],
@@ -195,13 +241,11 @@ class Checkout_umum extends CI_Controller {
             }
         }
 
-        // Build pesan WhatsApp
-        $kode_pesanan = $this->pesanan_model->generate_kode_pesanan();
-        $nama_label = str_replace(['_', '-'], ' ', $order['type']);
-        $nama_label = ucwords($nama_label);
+        // Build pesan WhatsApp — format dinamis sesuai requirement
+        $metode_label = strtoupper(str_replace('_', ' ', $metode_pembayaran));
 
         $pesan = "Halo NINGNONG Kue Basah,%0A%0A";
-        $pesan .= "Saya ingin konfirmasi pesanan *" . $nama_label . "* dengan kode: *" . $kode_pesanan . "*%0A%0A";
+        $pesan .= "Saya ingin konfirmasi pesanan *" . $nama_produk . "* dengan kode: *" . $kode_pesanan . "*%0A%0A";
         $pesan .= "*Detail:*%0A";
 
         switch ($order['type']) {
@@ -218,6 +262,11 @@ class Checkout_umum extends CI_Controller {
                 break;
             case 'catering':
                 $pesan .= "  • Paket: " . $order['nama_paket'] . "%0A";
+                $pesan .= "  • Isi Menu:%0A";
+                foreach ($order['items'] as $item) {
+                    $harga_item = (int)$item['harga'];
+                    $pesan .= "    - " . $item['nama_item'] . ($harga_item > 0 ? " (+Rp " . number_format($harga_item, 0, ',', '.') . ")" : "") . "%0A";
+                }
                 $pesan .= "  • Jumlah Box: " . $jumlah . "%0A";
                 break;
             case 'nyiru':
@@ -226,7 +275,7 @@ class Checkout_umum extends CI_Controller {
                 break;
         }
 
-        $pesan .= "%0A*Metode Pembayaran: " . strtoupper(str_replace('_', ' ', $metode_pembayaran)) . "*%0A";
+        $pesan .= "%0A*Metode Pembayaran: " . $metode_label . "*%0A";
         $pesan .= "*Total Pembayaran: Rp " . number_format($total_harga, 0, ',', '.') . "*%0A";
         $pesan .= "Tanggal Kirim: " . date('d/m/Y', strtotime($tanggal_kirim)) . "%0A%0A";
         $pesan .= "*Data Pengiriman:*%0A";
@@ -235,9 +284,29 @@ class Checkout_umum extends CI_Controller {
         $pesan .= "Alamat: " . $alamat . "%0A";
         $pesan .= "%0ATerima kasih!";
 
-        // Hapus session pesanan
+        // Simpan flag sukses & hapus session pesanan
+        $this->session->set_userdata('last_order_success', $kode_pesanan);
         $this->session->unset_userdata('selected_order');
 
         redirect('https://wa.me/' . NOMOR_WA_PENJUAL . '?text=' . $pesan);
+    }
+
+    /**
+     * Mengembalikan URL landing page berdasarkan jenis pesanan.
+     * Digunakan untuk redirect saat user back setelah checkout sukses.
+     */
+    private function get_referrer_url($order_type)
+    {
+        switch ($order_type) {
+            case 'catering':
+                return base_url('catering');
+            case 'snack_box':
+                return base_url('pesanan/snack_box_builder');
+            case 'nyiru':
+                return base_url('produk');
+            case 'pesan_satuan':
+            default:
+                return base_url('produk');
+        }
     }
 }

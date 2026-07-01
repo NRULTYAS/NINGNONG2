@@ -195,7 +195,7 @@
                 row.className = "flex items-start justify-between gap-3 bg-krem/40 border border-coklat-muda/20 rounded-2xl p-3";
                 row.innerHTML =
                     "<div class='min-w-0'>" +
-                        "<div class='font-semibold text-gray-800 text-sm truncate'>Item #" + (it.product_id ?? it.item_id) +"</div>" +
+                        "<div class='font-semibold text-gray-800 text-sm truncate'>" + (it.nama_produk || "Item #" + (it.product_id ?? it.item_id)) + "</div>" +
                         "<div class='text-xs text-gray-500'>Qty: <span class='font-semibold'>" + (it.quantity ?? 0) +"</span></div>" +
                     "</div>" +
                     "<div class='text-right'>" +

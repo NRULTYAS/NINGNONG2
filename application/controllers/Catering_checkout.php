@@ -18,6 +18,7 @@ class Catering_checkout extends CI_Controller {
         $this->load->model('pesanan_model');
         $this->load->model('user_model');
         $this->load->model('keranjang_model');
+        $this->load->library('upload');
     }
 
     public function index()
@@ -77,6 +78,47 @@ class Catering_checkout extends CI_Controller {
             redirect('catering_checkout');
         }
 
+        // Validasi bukti pembayaran untuk Transfer / QRIS (bukan COD)
+        $is_paid_method = in_array(strtolower($metode), ['transfer bank', 'qris', 'e-wallet']);
+        $bukti_pembayaran = null;
+        
+        if ($is_paid_method) {
+            if (empty($_FILES['bukti_pembayaran']['name'])) {
+                $this->session->set_flashdata('error', 'Bukti pembayaran wajib dilampirkan untuk metode Transfer/QRIS.');
+                redirect('catering_checkout');
+            }
+            // Upload
+            $config['upload_path'] = FCPATH . 'assets/upload/';
+            $config['allowed_types'] = 'jpg|jpeg|png|webp';
+            $config['max_size'] = 2048;
+            $config['file_name'] = 'bukti_' . time() . '_' . rand(100,999);
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0777, true);
+            }
+            $this->upload->initialize($config);
+            if ($this->upload->do_upload('bukti_pembayaran')) {
+                $bukti_pembayaran = $this->upload->data('file_name');
+            } else {
+                $this->session->set_flashdata('error', 'Upload bukti pembayaran gagal: ' . $this->upload->display_errors('', ''));
+                redirect('catering_checkout');
+            }
+        } else {
+            // COD - upload opsional
+            if (!empty($_FILES['bukti_pembayaran']['name'])) {
+                $config['upload_path'] = FCPATH . 'assets/upload/';
+                $config['allowed_types'] = 'jpg|jpeg|png|webp';
+                $config['max_size'] = 2048;
+                $config['file_name'] = 'bukti_' . time() . '_' . rand(100,999);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0777, true);
+                }
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('bukti_pembayaran')) {
+                    $bukti_pembayaran = $this->upload->data('file_name');
+                }
+            }
+        }
+
         $harga_per_box = (float)$catering_order['harga_per_box'];
         $total_harga = $harga_per_box * $jumlah_box;
 
@@ -102,6 +144,7 @@ class Catering_checkout extends CI_Controller {
             'total_harga' => $total_harga,
             'status' => 'pending',
             'metode_pembayaran' => $metode,
+            'bukti_pembayaran' => $bukti_pembayaran,
             'catatan' => $catatan,
             'tanggal_kirim' => $tanggal_kirim,
             'detail_kustom' => $detail_kustom
@@ -112,24 +155,28 @@ class Catering_checkout extends CI_Controller {
         // Hapus session catering
         $this->session->unset_userdata('catering_order');
 
-        // Buat pesan WhatsApp
-        $items_detail = $catering_order['items'];
+        // Buat pesan WhatsApp — format dinamis sesuai requirement
+        $nama_label = $catering_order['nama_paket'];
+        $metode_label = strtoupper(str_replace('_', ' ', $metode));
+
         $pesan = "Halo NINGNONG Kue Basah,%0A%0A";
-        $pesan .= "Saya ingin konfirmasi pesanan *" . $catering_order['nama_paket'] . "* dengan kode: *" . $kode_pesanan . "*%0A%0A";
-        $pesan .= "*Detail Menu:*%0A";
-        $kat_sekarang = '';
+        $pesan .= "Saya ingin konfirmasi pesanan *" . $nama_label . "* dengan kode: *" . $kode_pesanan . "*%0A%0A";
+        $pesan .= "*Detail:*%0A";
+
+        // Isi Paket — list semua item yang dipilih customer (actual pilihan, bukan default)
+        $pesan .= "  • Paket: " . $catering_order['nama_paket'] . "%0A";
+        $pesan .= "  • Isi Menu:%0A";
+        $items_detail = $catering_order['items'];
         foreach ($items_detail as $item) {
-            if ($item['kategori'] != $kat_sekarang) {
-                $kat_sekarang = $item['kategori'];
-                $pesan .= "  — {$item['kategori']}:%0A";
-            }
             $harga_item = (int)$item['harga'];
-            $pesan .= "    • {$item['nama_item']}" . ($harga_item > 0 ? " (+Rp " . number_format($harga_item, 0, ',', '.') . ")" : "") . "%0A";
+            $pesan .= "    - " . $item['nama_item'] . ($harga_item > 0 ? " (+Rp " . number_format($harga_item, 0, ',', '.') . ")" : "") . "%0A";
         }
-        $pesan .= "%0A*Harga per box: Rp " . number_format($harga_per_box, 0, ',', '.') . "*%0A";
-        $pesan .= "*Jumlah Box: " . $jumlah_box . "*%0A";
+        $pesan .= "  • Jumlah Box: " . $jumlah_box . "%0A%0A";
+        $pesan .= "*Metode Pembayaran: " . $metode_label . "*%0A";
         $pesan .= "*Total Pembayaran: Rp " . number_format($total_harga, 0, ',', '.') . "*%0A";
-        $pesan .= "Metode Pembayaran: QRIS%0A";
+        if ($metode === 'COD') {
+            $pesan .= "Status Pembayaran: Bayar di Tempat%0A";
+        }
         $pesan .= "Tanggal Kirim: " . date('d/m/Y', strtotime($tanggal_kirim)) . "%0A%0A";
         $pesan .= "*Data Pengiriman:*%0A";
         $pesan .= "Nama: " . $nama_penerima . "%0A";
