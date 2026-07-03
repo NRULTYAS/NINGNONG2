@@ -18,6 +18,8 @@ class Checkout extends CI_Controller {
         $this->load->model('pesanan_model');
         $this->load->model('user_model');
         $this->load->model('kategori_model');
+        $this->load->library('form_validation');
+        $this->load->library('upload');
     }
 
     public function index()
@@ -42,12 +44,61 @@ class Checkout extends CI_Controller {
             redirect('keranjang');
         }
 
+        // ---- FORM VALIDATION ----
+        $this->form_validation->set_rules('nama_penerima', 'Nama Penerima', 'required|trim');
+        $this->form_validation->set_rules('no_hp', 'No. HP', 'required|trim');
+        $this->form_validation->set_rules('alamat', 'Alamat Pengiriman', 'required|trim');
+        $this->form_validation->set_rules('tanggal_kirim', 'Tanggal Pengiriman', 'required|trim');
+        $this->form_validation->set_rules('metode_pembayaran', 'Metode Pembayaran', 'required|trim');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors(' ', ' '));
+            redirect('checkout');
+            return;
+        }
+
         $nama_penerima = $this->input->post('nama_penerima', TRUE);
         $no_hp = $this->input->post('no_hp', TRUE);
         $alamat = $this->input->post('alamat', TRUE);
         $metode = $this->input->post('metode_pembayaran', TRUE);
         $catatan = $this->input->post('catatan', TRUE);
+        $tanggal_kirim = $this->input->post('tanggal_kirim', TRUE);
 
+        // ---- VALIDASI BUKTI PEMBAYARAN (BACKEND) ----
+        $bukti_pembayaran = NULL;
+
+        if ($metode === 'transfer' || $metode === 'ewallet') {
+            if (!isset($_FILES['bukti_pembayaran']) || $_FILES['bukti_pembayaran']['error'] === UPLOAD_ERR_NO_FILE) {
+                $this->session->set_flashdata('error', 'Bukti pembayaran wajib dilampirkan untuk metode Transfer / E-Wallet.');
+                redirect('checkout');
+                return;
+            }
+
+            // Konfigurasi upload
+            $config['upload_path'] = FCPATH . 'assets/uploads/bukti_pembayaran/';
+            $config['allowed_types'] = 'jpg|jpeg|png|webp';
+            $config['max_size'] = 2048; // 2MB
+            $config['encrypt_name'] = TRUE;
+
+            // Buat folder jika belum ada
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0755, TRUE);
+            }
+
+            $this->upload->initialize($config);
+
+            if (!$this->upload->do_upload('bukti_pembayaran')) {
+                $error = $this->upload->display_errors(' ', ' ');
+                $this->session->set_flashdata('error', 'Upload bukti pembayaran gagal: ' . $error);
+                redirect('checkout');
+                return;
+            }
+
+            $upload_data = $this->upload->data();
+            $bukti_pembayaran = 'assets/uploads/bukti_pembayaran/' . $upload_data['file_name'];
+        }
+
+        // ---- HITUNG TOTAL ----
         $total = 0;
         foreach ($items as $item) {
             $total += $item->harga * $item->jumlah;
@@ -61,9 +112,11 @@ class Checkout extends CI_Controller {
             'nama_penerima' => $nama_penerima,
             'no_hp_penerima' => $no_hp,
             'alamat_pengiriman' => $alamat,
+            'tanggal_kirim' => $tanggal_kirim,
             'total_harga' => $total,
             'status' => 'pending',
             'metode_pembayaran' => $metode,
+            'bukti_pembayaran' => $bukti_pembayaran,
             'catatan' => $catatan
         ];
 
@@ -100,7 +153,7 @@ class Checkout extends CI_Controller {
         $pesan .= "*Jumlah: " . $total_items . " item*%0A";
         $pesan .= "*Total Pembayaran: Rp " . number_format($total, 0, ',', '.') . "*%0A";
         $pesan .= "Metode Pembayaran: " . ucfirst($metode) . "%0A";
-        $pesan .= "Tanggal Kirim: " . date('d/m/Y', strtotime($this->input->post('tanggal_kirim', TRUE))) . "%0A%0A";
+        $pesan .= "Tanggal Kirim: " . date('d/m/Y', strtotime($tanggal_kirim)) . "%0A%0A";
         $pesan .= "*Data Pengiriman:*%0A";
         $pesan .= "Nama: " . $nama_penerima . "%0A";
         $pesan .= "No HP: " . $no_hp . "%0A";

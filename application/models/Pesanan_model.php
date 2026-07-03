@@ -85,7 +85,7 @@ public function total_penjualan()
         $this->db->select_sum('tbl_pesanan.total_harga');
         $this->db->where('tbl_pesanan.created_at >=', $dari . ' 00:00:00');
         $this->db->where('tbl_pesanan.created_at <=', $sampai . ' 23:59:59');
-        $this->db->where('tbl_pesanan.status !=', 'dibatalkan');
+        $this->db->where('tbl_pesanan.status', 'selesai');
         $result = $this->db->get($this->table)->row();
         return $result->total_harga ?: 0;
     }
@@ -99,7 +99,7 @@ public function total_penjualan()
         $this->db->from('tbl_pesanan');
         $this->db->where('tbl_pesanan.created_at >=', $dari . ' 00:00:00');
         $this->db->where('tbl_pesanan.created_at <=', $sampai . ' 23:59:59');
-        $this->db->where('tbl_pesanan.status !=', 'dibatalkan');
+        $this->db->where('tbl_pesanan.status', 'selesai');
         $this->db->order_by('tbl_pesanan.created_at', 'DESC');
         return $this->db->get()->result();
     }
