@@ -25,16 +25,6 @@
                         <?php endif; ?>
                     </div>
                 </div>
-                <!-- Floating badge -->
-                <div class="absolute -bottom-4 -right-4 md:bottom-4 md:right-4 bg-surface rounded-2xl shadow-xl p-4 flex items-center gap-3 animate-float border border-border-subtle/10">
-                    <div class="w-12 h-12 bg-gradient-to-br from-primary to-primary-hover rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/30">
-                        <i class="fas fa-award"></i>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-text-main text-sm">Terlaris</p>
-                        <p class="text-xs text-text-subtle">Paling Diminati</p>
-                    </div>
-                </div>
             </div>
 
             <!-- Info -->
