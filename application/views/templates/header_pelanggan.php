@@ -132,6 +132,11 @@ $jumlah_keranjang = isset($jumlah_keranjang) ? $jumlah_keranjang : 0;
                         <span class="block text-[10px] text-secondary font-medium -mt-0.5 tracking-wider">KUE BASAH</span>
                     </div>
                 </a>
+                <!-- Mobile menu button -->
+                <button id="hamburgerBtn" class="md:hidden p-2 text-text-muted hover:text-primary transition-colors duration-200 rounded-xl hover:bg-secondary-light focus:outline-none" aria-label="Menu">
+                    <i class="fas fa-bars text-lg" id="hamburgerIcon"></i>
+                </button>
+
                 <div class="hidden md:flex items-center gap-8">
                     <a href="<?php echo base_url('home'); ?>" class="nav-link text-text-muted hover:text-primary font-medium transition-colors duration-200 text-sm">Beranda</a>
                     <a href="<?php echo base_url('produk'); ?>" class="nav-link text-text-muted hover:text-primary font-medium transition-colors duration-200 text-sm">Aneka Kue</a>
@@ -216,8 +221,76 @@ $jumlah_keranjang = isset($jumlah_keranjang) ? $jumlah_keranjang : 0;
         </div>
     </nav>
 
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="md:hidden fixed inset-x-0 top-[72px] z-40 bg-surface/95 backdrop-blur-lg border-b border-border-subtle/60 shadow-lg transform -translate-y-full opacity-0 transition-all duration-300 ease-in-out pointer-events-none">
+        <div class="px-4 py-4 space-y-1">
+            <a href="<?php echo base_url('home'); ?>" class="block px-4 py-3 rounded-xl text-text-muted hover:text-primary hover:bg-secondary-light font-medium transition-colors duration-200 text-sm">Beranda</a>
+            <a href="<?php echo base_url('produk'); ?>" class="block px-4 py-3 rounded-xl text-text-muted hover:text-primary hover:bg-secondary-light font-medium transition-colors duration-200 text-sm">Aneka Kue</a>
+        </div>
+    </div>
+    <!-- Overlay -->
+    <div id="mobileOverlay" class="md:hidden fixed inset-0 z-30 bg-black/20 opacity-0 pointer-events-none transition-opacity duration-300" onclick="closeMobileMenu()"></div>
+
     <script>
     (function() {
+        var hamburgerBtn = document.getElementById('hamburgerBtn');
+        var hamburgerIcon = document.getElementById('hamburgerIcon');
+        var mobileMenu = document.getElementById('mobileMenu');
+        var mobileOverlay = document.getElementById('mobileOverlay');
+
+        window.openMobileMenu = function() {
+            mobileMenu.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
+            mobileMenu.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            mobileOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            mobileOverlay.classList.add('opacity-100', 'pointer-events-auto');
+            if (hamburgerIcon) {
+                hamburgerIcon.classList.remove('fa-bars');
+                hamburgerIcon.classList.add('fa-times');
+            }
+        };
+
+        window.closeMobileMenu = function() {
+            mobileMenu.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            mobileMenu.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+            mobileOverlay.classList.remove('opacity-100', 'pointer-events-auto');
+            mobileOverlay.classList.add('opacity-0', 'pointer-events-none');
+            if (hamburgerIcon) {
+                hamburgerIcon.classList.remove('fa-times');
+                hamburgerIcon.classList.add('fa-bars');
+            }
+        };
+
+        if (hamburgerBtn) {
+            hamburgerBtn.addEventListener('click', function() {
+                if (mobileMenu.classList.contains('pointer-events-none')) {
+                    openMobileMenu();
+                } else {
+                    closeMobileMenu();
+                }
+            });
+        }
+
+        // Tutup menu saat link di klik
+        document.querySelectorAll('#mobileMenu a').forEach(function(link) {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        // Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeMobileMenu();
+        });
+
+        // Tutup saat resize ke desktop
+        var resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                if (window.innerWidth >= 768) {
+                    closeMobileMenu();
+                }
+            }, 200);
+        });
+
         var nav = document.querySelector('nav');
         if (!nav) return;
         function updateShadow() {
@@ -229,6 +302,13 @@ $jumlah_keranjang = isset($jumlah_keranjang) ? $jumlah_keranjang : 0;
                 nav.classList.remove('shadow-md', 'border-border-subtle');
             }
         }
+        // Sembunyikan mobile menu saat scroll
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 10 && !mobileMenu.classList.contains('pointer-events-none')) {
+                closeMobileMenu();
+            }
+        }, { passive: true });
+
         window.addEventListener('scroll', updateShadow, { passive: true });
         updateShadow();
     })();
