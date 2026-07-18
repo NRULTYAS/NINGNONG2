@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - NINGNONG Kue Basah</title>
+    <title>Lupa Password - NINGNONG Kue Basah</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -33,30 +33,16 @@
         body { font-family: 'Inter', sans-serif; }
         .blob { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
         @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
-        .toggle-pwd { cursor: pointer; }
     </style>
-    <script>
-        function togglePassword(inputId, iconId) {
-            const input = document.getElementById(inputId);
-            const icon = document.getElementById(iconId);
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                input.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        }
-    </script>
 </head>
 <body class="bg-background min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <!-- Decorative blobs -->
     <div class="absolute -top-20 -left-20 w-72 h-72 bg-secondary-light blob animate-[float_6s_ease-in-out_infinite] opacity-50"></div>
     <div class="absolute -bottom-20 -right-20 w-96 h-96 bg-accent blob animate-[float_6s_ease-in-out_infinite] opacity-40" style="animation-delay:2s"></div>
     <div class="absolute top-1/2 left-1/2 w-48 h-48 bg-primary-light blob animate-[float_6s_ease-in-out_infinite] opacity-30" style="animation-delay:4s"></div>
 
     <div class="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center relative z-10">
+        <!-- Left Panel -->
         <div class="hidden md:flex flex-col items-center text-center p-8">
             <div class="w-24 h-24 bg-primary rounded-3xl flex items-center justify-center text-white font-bold text-4xl shadow-2xl shadow-primary/30 mb-6">N</div>
             <h1 class="text-4xl font-bold text-main mb-3" style="font-family: 'Plus Jakarta Sans', sans-serif;">NINGNONG</h1>
@@ -64,53 +50,54 @@
             <p class="text-muted text-sm max-w-xs">Nikmati kelezatan kue basah dengan bahan berkualitas dan rasa autentik.</p>
         </div>
 
+        <!-- Forgot Password Form -->
         <div class="bg-surface rounded-3xl p-8 shadow-lg shadow-primary/10 border border-border-subtle">
             <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-main mb-1" style="font-family: 'Plus Jakarta Sans', sans-serif;">Daftar Akun</h2>
-                <p class="text-muted text-sm">Buat akun baru Anda</p>
+                <div class="w-14 h-14 bg-primary-light rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-key text-primary text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-main mb-1" style="font-family: 'Plus Jakarta Sans', sans-serif;">Lupa Password</h2>
+                <p class="text-muted text-sm">Masukkan email Anda untuk mendapatkan link reset password</p>
             </div>
-            <?php if (!empty($error_message)): ?>
-                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm">
-                    <?php echo $error_message; ?>
+
+            <?php if ($this->session->flashdata('success')): ?>
+                <div class="mb-4 p-3 bg-primary-light border border-primary/20 rounded-xl text-primary text-sm flex items-center gap-2">
+                    <i class="fas fa-check-circle"></i>
+                    <?php echo $this->session->flashdata('success'); ?>
                 </div>
             <?php endif; ?>
-            <form action="<?php echo base_url('auth/proses_register'); ?>" method="post">
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-muted mb-2">Nama Lengkap</label>
-                    <div class="relative">
-                        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-muted"><i class="fas fa-user"></i></div>
-                        <input type="text" name="nama" required class="w-full pl-11 pr-4 py-3 rounded-xl border border-border-subtle bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition" placeholder="Nama lengkap">
-                    </div>
+
+            <?php if ($this->session->flashdata('error')): ?>
+                <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm flex items-center gap-2">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <?php echo $this->session->flashdata('error'); ?>
                 </div>
-                <div class="mb-4">
+            <?php endif; ?>
+
+            <?php $reset_link = $this->session->flashdata('reset_link'); ?>
+            <?php if ($reset_link): ?>
+                <div class="mb-4 p-4 bg-primary-light border border-primary/20 rounded-xl text-primary text-sm">
+                    <p class="font-medium mb-2 flex items-center gap-2">
+                        <i class="fas fa-link"></i> Link Reset Password (Development Mode):
+                    </p>
+                    <a href="<?php echo $reset_link; ?>" class="text-primary font-semibold hover:underline break-all"><?php echo $reset_link; ?></a>
+                </div>
+            <?php endif; ?>
+
+            <form action="<?php echo base_url('auth/send_reset_link'); ?>" method="post">
+                <div class="mb-6">
                     <label class="block text-sm font-medium text-muted mb-2">Email</label>
                     <div class="relative">
                         <div class="absolute left-4 top-1/2 -translate-y-1/2 text-muted"><i class="fas fa-envelope"></i></div>
                         <input type="email" name="email" required class="w-full pl-11 pr-4 py-3 rounded-xl border border-border-subtle bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition" placeholder="nama@email.com">
                     </div>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-muted mb-2">No. HP</label>
-                    <div class="relative">
-                        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-muted"><i class="fas fa-phone"></i></div>
-                        <input type="text" name="no_hp" required class="w-full pl-11 pr-4 py-3 rounded-xl border border-border-subtle bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition" placeholder="0812xxxxxxx">
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-muted mb-2">Password</label>
-                    <div class="relative">
-                        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-muted"><i class="fas fa-lock"></i></div>
-                        <input type="password" id="reg_password" name="password" required class="w-full pl-11 pr-12 py-3 rounded-xl border border-border-subtle bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition" placeholder="••••••••">
-                        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-subtle hover:text-muted transition toggle-pwd" onclick="togglePassword('reg_password', 'reg_pwd_icon')">
-                            <i id="reg_pwd_icon" class="fas fa-eye"></i>
-                        </div>
-                    </div>
-                </div>
                 <button type="submit" class="w-full py-3.5 bg-primary text-white rounded-full font-medium hover:bg-primary-hover transition-all duration-200 shadow-md shadow-primary/20 flex items-center justify-center gap-2">
-                    <i class="fas fa-user-plus text-sm"></i> Daftar
+                    <i class="fas fa-paper-plane text-sm"></i> Kirim Link Reset
                 </button>
             </form>
-            <p class="text-center mt-6 text-subtle text-sm">Sudah punya akun? <a href="<?php echo base_url('auth/login'); ?>" class="text-primary font-semibold hover:underline">Masuk</a></p>
+
+            <p class="text-center mt-6 text-subtle text-sm">Ingat password Anda? <a href="<?php echo base_url('auth/login'); ?>" class="text-primary font-semibold hover:underline">Masuk</a></p>
         </div>
     </div>
 </body>

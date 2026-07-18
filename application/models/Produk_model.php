@@ -12,6 +12,7 @@ class Produk_model extends CI_Model {
         $this->db->select('tbl_produk.*, tbl_kategori.nama_kategori');
         $this->db->join('tbl_kategori', 'tbl_kategori.id_kategori = tbl_produk.id_kategori', 'left');
         $this->db->where('tbl_produk.is_nyiru !=', 1);
+        $this->db->order_by('id_produk', 'DESC');
         if ($limit) $this->db->limit($limit, $offset);
         return $this->db->get($this->table)->result();
     }
@@ -25,6 +26,7 @@ class Produk_model extends CI_Model {
     public function get_by_kategori($id_kategori) {
         $this->db->join('tbl_kategori', 'tbl_kategori.id_kategori = tbl_produk.id_kategori', 'left');
         $this->db->where('tbl_produk.is_nyiru !=', 1);
+        $this->db->order_by('id_produk', 'DESC');
         return $this->db->get_where($this->table, ['tbl_produk.id_kategori' => $id_kategori])->result();
     }
 
@@ -40,6 +42,7 @@ class Produk_model extends CI_Model {
         if ($id_kategori) {
             $this->db->where('tbl_produk.id_kategori', $id_kategori);
         }
+        $this->db->order_by('id_produk', 'DESC');
         return $this->db->get($this->table)->result();
     }
 
@@ -55,6 +58,7 @@ class Produk_model extends CI_Model {
         if ($id_kategori) {
             $this->db->where('tbl_produk.id_kategori', $id_kategori);
         }
+        $this->db->order_by('id_produk', 'DESC');
         if ($limit) $this->db->limit($limit, $offset);
 
         return $this->db->get($this->table)->result();
@@ -106,6 +110,7 @@ class Produk_model extends CI_Model {
         $this->db->join('tbl_kategori', 'tbl_kategori.id_kategori = tbl_produk.id_kategori');
         $this->db->where('tbl_produk.snack_box', 1);
         $this->db->where('tbl_produk.harga <', 5000);
+        $this->db->order_by('id_produk', 'DESC');
         if ($limit) $this->db->limit($limit, $offset);
         return $this->db->get($this->table)->result();
     }
@@ -115,6 +120,7 @@ class Produk_model extends CI_Model {
         $this->db->where('tbl_produk.snack_box', 1);
         $this->db->where('tbl_produk.harga <', 5000);
         $this->db->where('tbl_produk.id_kategori', $id_kategori);
+        $this->db->order_by('id_produk', 'DESC');
         return $this->db->get($this->table)->result();
     }
 

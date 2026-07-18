@@ -219,27 +219,4 @@ src="<?php echo base_url('assets/img/images-40-2.jpeg'); ?>"
     </div>
 </section>
 
-<!-- CTA Section -->
-<section class="relative bg-gradient-to-br from-primary via-primary-hover to-primary shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.08)_0%,transparent_70%)]"></div>
-    <div class="absolute -top-12 left-1/4 w-64 h-64 bg-accent/5 organic-shape blur-2xl"></div>
-    <div class="absolute -bottom-8 right-1/4 w-48 h-48 bg-secondary-light/5 organic-shape blur-xl"></div>
-
-    <div class="max-w-3xl mx-auto px-4 py-14 md:py-16 text-center relative">
-        <h2 class="text-2xl md:text-3xl font-bold text-white mb-3 tracking-tight font-heading">Siap Memesan Kue Favoritmu?</h2>
-        <p class="text-background/70 text-sm md:text-base mb-8 max-w-lg mx-auto">Pesan sekarang dan nikmati kelezatan kue basah segar langsung ke rumahmu</p>
-        <div class="flex flex-wrap justify-center gap-3">
-            <a href="<?php echo base_url('produk'); ?>" class="px-7 py-3 bg-surface text-primary rounded-full font-semibold text-sm hover:bg-white hover:shadow-lg hover:shadow-black/10 transition-all duration-200 flex items-center gap-2 shadow-md">
-                <i class="fas fa-shopping-bag text-xs"></i> Pesan Sekarang
-            </a>
-            <a href="https://wa.me/<?php echo NOMOR_WA_PENJUAL; ?>" target="_blank" class="px-7 py-3 bg-[#25D366] text-white rounded-full font-semibold text-sm hover:bg-[#1da851] hover:shadow-lg hover:shadow-black/10 transition-all duration-200 flex items-center gap-2 shadow-md">
-                <i class="fab fa-whatsapp text-xs"></i> Chat WhatsApp
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Gold accent separator -->
-<div class="h-px bg-gradient-to-r from-transparent via-accent/25 to-transparent"></div>
-
-<?php $this->load->view('templates/footer_pelanggan'); ?>
+    <?php $this->load->view('templates/footer_pelanggan'); ?>

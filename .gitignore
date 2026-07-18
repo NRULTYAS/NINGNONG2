@@ -48,3 +48,7 @@ writable/session/*
 
 # XAMPP
 .DS_Store
+
+# Credential config files (jangan di-commit)
+/application/config/google.php
+/application/config/email.php

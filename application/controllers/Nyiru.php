@@ -47,6 +47,10 @@ class Nyiru extends CI_Controller {
             redirect('nyiru');
         }
 
+        // Hapus session dari pesanan sebelumnya agar tidak tercampur
+        $this->session->unset_userdata('order_referrer');
+        $this->session->unset_userdata('last_order_success');
+
         // Simpan ke session untuk checkout umum
         $this->session->set_userdata('selected_order', [
             'type' => 'nyiru',

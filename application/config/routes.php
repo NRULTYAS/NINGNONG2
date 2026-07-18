@@ -11,13 +11,19 @@ $route['register'] = 'auth/register';
 $route['logout'] = 'auth/logout';
 $route['auth/proses_login'] = 'auth/proses_login';
 $route['auth/proses_register'] = 'auth/proses_register';
+$route['auth/google'] = 'auth/google';
+$route['auth/google_callback'] = 'auth/google_callback';
+$route['lupa-password'] = 'auth/forgot_password';
+$route['auth/forgot_password'] = 'auth/forgot_password';
+$route['auth/send_reset_link'] = 'auth/send_reset_link';
+$route['auth/reset_password'] = 'auth/reset_password';
+$route['auth/proses_reset_password'] = 'auth/proses_reset_password';
 
 // Produk Routes
 $route['produk'] = 'produk';
 $route['produk/(:num)'] = 'produk/index/$1';
 $route['produk/detail/(:num)'] = 'produk/detail/$1';
 $route['produk/pesan/(:num)'] = 'produk/pesan/$1';
-
 
 // Keranjang Routes
 $route['keranjang'] = 'keranjang';
@@ -67,7 +73,6 @@ $route['admin/pesanan/update_status/(:num)'] = 'admin/pesanan/update_status/$1';
 $route['admin/laporan'] = 'admin/laporan';
 
 // Box Checkout Routes
-
 $route['box_checkout'] = 'box_checkout';
 $route['box_checkout/proses'] = 'box_checkout/proses';
 $route['box_checkout/sukses/(:num)'] = 'box_checkout/sukses/$1';
@@ -79,3 +84,4 @@ $route['nyiru/proses'] = 'nyiru/proses';
 // Riwayat Routes
 $route['riwayat'] = 'riwayat';
 $route['riwayat/detail/(:num)'] = 'riwayat/detail/$1';
+

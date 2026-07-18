@@ -25,7 +25,15 @@ class Checkout_umum extends CI_Controller {
         $this->output->set_header('Pragma: no-cache');
         $this->output->set_header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 
-        // Kalau user pencet back setelah checkout sukses, balik ke halaman asal (mis. catering), bukan daftar produk
+        // Cek apakah user datang dari halaman nyiru via GET (form action langsung ke sini)
+        // Jika ya, hapus session lama dulu sebelum diproses lebih lanjut
+        if ($this->input->get('type') === 'nyiru') {
+            $this->session->unset_userdata('last_order_success');
+            $this->session->unset_userdata('order_referrer');
+        }
+
+        // Kalau user pencet back setelah checkout sukses, arahkan ke halaman asal
+        // (mis. catering/produk/nyiru), bukan checkout umum.
         if ($this->session->userdata('last_order_success')) {
             $kode = $this->session->userdata('last_order_success');
             $tujuan = $this->session->userdata('order_referrer') ?: base_url('produk');
@@ -34,6 +42,30 @@ class Checkout_umum extends CI_Controller {
             $this->session->set_flashdata('success', 'Pesanan #' . $kode . ' sudah berhasil dibuat. Silakan cek WhatsApp untuk konfirmasi pesanan Anda.');
             redirect($tujuan);
         }
+
+        // Jika user membuka lagi halaman checkout umum akibat tombol Back dari WhatsApp,
+        // pastikan kita tidak menampilkan halaman checkout lagi.
+        if ($this->input->get('app_absent') === '1' || $this->input->get('source') === 'web') {
+            // 1) prefer berdasarkan parameter GET type (khusus kasus nyiru yang pakai GET)
+            $typeFromGet = $this->input->get('type');
+            if ($typeFromGet) {
+                $tujuan = $this->get_referrer_url($typeFromGet);
+            } else {
+                // 2) fallback berdasarkan referrer session
+                $tujuan = $this->session->userdata('order_referrer') ?: base_url('produk');
+
+                // 3) fallback ekstra dari selected_order jika masih ada
+                $order = $this->session->userdata('selected_order');
+                if (!empty($order) && isset($order['type'])) {
+                    $tujuan = $this->get_referrer_url($order['type']);
+                }
+            }
+
+            $this->session->set_flashdata('success', 'Pesanan berhasil dibuat. Silakan cek WhatsApp untuk konfirmasi pesanan Anda.');
+            redirect($tujuan);
+        }
+
+
 
         $order = $this->session->userdata('selected_order');
 
@@ -61,9 +93,9 @@ class Checkout_umum extends CI_Controller {
 
         // Simpan halaman asal berdasarkan jenis pesanan (bukan dari HTTP_REFERER)
         // supaya back setelah checkout sukses balik ke landing page, bukan ke halaman kustomisasi.
-        if (!$this->session->userdata('order_referrer')) {
-            $this->session->set_userdata('order_referrer', $this->get_referrer_url($order['type']));
-        }
+        // SELALU update order_referrer sesuai tipe pesanan saat ini, agar tidak tertukar
+        // dengan session lama dari pesanan sebelumnya (misal snack box lalu catering).
+        $this->session->set_userdata('order_referrer', $this->get_referrer_url($order['type']));
 
         $data['order'] = $order;
         $data['user'] = $this->user_model->get_by_id($this->session->userdata('id_user'));
@@ -288,7 +320,9 @@ class Checkout_umum extends CI_Controller {
         $this->session->set_userdata('last_order_success', $kode_pesanan);
         $this->session->unset_userdata('selected_order');
 
-        redirect('https://wa.me/' . NOMOR_WA_PENJUAL . '?text=' . $pesan);
+        // Saat user kembali dari WhatsApp, hindari balik ke halaman checkout
+        // dan arahkan kembali ke halaman asal sesuai jenis pesanan.
+        redirect('https://wa.me/' . NOMOR_WA_PENJUAL . '?text=' . $pesan . '&app_absent=1&source=web');
     }
 
     /**

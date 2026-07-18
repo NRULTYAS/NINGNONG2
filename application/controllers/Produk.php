@@ -88,6 +88,10 @@ class Produk extends CI_Controller {
             redirect('produk');
         }
 
+        // Hapus session dari pesanan sebelumnya agar tidak tercampur
+        $this->session->unset_userdata('order_referrer');
+        $this->session->unset_userdata('last_order_success');
+
         $this->session->set_userdata('selected_order', [
             'type' => 'pesan_satuan',
             'id_produk' => $produk->id_produk,

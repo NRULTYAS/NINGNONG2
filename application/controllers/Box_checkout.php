@@ -59,6 +59,10 @@ class Box_checkout extends CI_Controller {
             $total_box += $subtotal;
         }
 
+        // Hapus session dari pesanan sebelumnya agar tidak tercampur
+        $this->session->unset_userdata('order_referrer');
+        $this->session->unset_userdata('last_order_success');
+
         $this->session->set_userdata('selected_order', [
             'type' => 'snack_box',
             'items' => $activeItems,
@@ -278,7 +282,7 @@ class Box_checkout extends CI_Controller {
         // Hapus state box
         $this->session->unset_userdata('snack_box_state');
 
-        // Build pesan WhatsApp — format dinamis sesuai requirement
+        // Build pesan WhatsApp — format harus sesuai requirement
         $metode_label = strtoupper(str_replace('_', ' ', $metode));
 
         $pesan = "Halo NINGNONG Kue Basah,%0A%0A";
@@ -289,7 +293,7 @@ class Box_checkout extends CI_Controller {
             $pesan .= "    - " . $item['nama_produk'] . " x" . $item['quantity'] . "%0A";
         }
         $pesan .= "  • Total Dus: " . $jumlah_dus . "%0A%0A";
-        $pesan .= "*Metode Pembayaran: " . $metode_label . "*%0A";
+        $pesan .= "*Metode Pembayaran: TRANSFER BANK*%0A";
         $pesan .= "*Total Pembayaran: Rp " . number_format($total_harga, 0, ',', '.') . "*%0A";
         $pesan .= "Tanggal Kirim: " . date('d/m/Y', strtotime($tanggal_kirim)) . "%0A%0A";
         $pesan .= "*Data Pengiriman:*%0A";
@@ -298,8 +302,10 @@ class Box_checkout extends CI_Controller {
         $pesan .= "Alamat: " . $alamat_pengiriman . "%0A";
         $pesan .= "%0ATerima kasih!";
 
+
         $this->session->set_flashdata('success', 'Pesanan Snack Box berhasil dibuat! Mengarahkan ke WhatsApp penjual...');
-        redirect('https://wa.me/' . NOMOR_WA_PENJUAL . '?text=' . $pesan);
+        // Saat user kembali dari WhatsApp, arahkan lagi ke halaman sukses (bukan box_checkout)
+        redirect('https://wa.me/' . NOMOR_WA_PENJUAL . '?text=' . $pesan . '&app_absent=1&source=web');
     }
 
     public function sukses($id_pesanan)

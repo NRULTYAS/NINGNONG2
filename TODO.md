@@ -1,7 +1,6 @@
-# TODO
-
-- [x] Identify tombol "Cetak PDF" dan tempatnya di view laporan penjualan
-- [x] Hapus tombol/link "Cetak PDF" (hapus semuanya agar kembali seperti semula tanpa button cetak pdf)
-- [ ] Cek tampilan halaman `admin/laporan` setelah periode dipilih (pastikan tidak ada tombol cetak/pdf yang tersisa)
-- [ ] Verifikasi `Download PDF` (jika masih diinginkan) dan tidak ada error saat render
+- [ ] Read Dompdf instantiation and options in application/controllers/Admin/Laporan.php
+- [ ] Verify logo file existence and correct path/case used by application/views/admin/laporan_pdf.php
+- [ ] Fix logo path for PDF using absolute filesystem path (FCPATH . 'assets/img/LOGO.png')
+- [ ] Ensure image output uses relative-safe path for dompdf (no base_url yet)
+- [ ] (If needed) re-run PDF generation and confirm logo shows
 

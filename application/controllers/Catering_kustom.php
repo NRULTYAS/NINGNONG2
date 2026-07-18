@@ -84,6 +84,10 @@ class Catering_kustom extends CI_Controller {
 
         $harga_per_box = (float)$paket->harga + $total_tambahan;
 
+        // Hapus session dari pesanan sebelumnya (misal snack box) agar tidak tercampur
+        $this->session->unset_userdata('order_referrer');
+        $this->session->unset_userdata('last_order_success');
+
         $this->session->set_userdata('selected_order', [
             'type' => 'catering',
             'paket_id' => $paket_id,

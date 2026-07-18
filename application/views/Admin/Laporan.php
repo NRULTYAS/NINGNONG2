@@ -23,6 +23,11 @@
         <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-primary text-white rounded-xl font-medium hover:bg-primary-hover transition-all duration-200 flex items-center justify-center gap-2 shadow-md shadow-primary/20">
             <i class="fas fa-search text-sm"></i> Tampilkan
         </button>
+        <?php if (isset($dari) && $dari && isset($sampai) && $sampai): ?>
+        <a href="<?php echo base_url('admin/laporan/cetak?dari='.$dari.'&sampai='.$sampai); ?>" target="_blank" class="w-full sm:w-auto px-6 py-2.5 bg-accent text-white rounded-xl font-medium hover:bg-accent-hover transition-all duration-200 flex items-center justify-center gap-2 shadow-md shadow-accent/20">
+            <i class="fas fa-print text-sm"></i> Cetak Laporan
+        </a>
+        <?php endif; ?>
     </form>
 </div>
 
