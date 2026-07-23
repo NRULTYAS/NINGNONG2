@@ -48,43 +48,75 @@
 .cta-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 50px 40px 40px;
-  text-align: center;
-  position: relative;
+  padding: 30px 20px 20px;
+}
+
+@media (min-width: 768px) {
+  .cta-content {
+    padding: 50px 40px 40px;
+  }
 }
 
 .cta-content h2 {
   color: #ffffff;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+@media (min-width: 768px) {
+  .cta-content h2 {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
 }
 
 .cta-content p {
   color: rgba(232,230,221,0.7);
-  font-size: 14px;
-  margin-bottom: 24px;
+  font-size: 12px;
+  margin-bottom: 16px;
   font-family: 'Inter', sans-serif;
+}
+
+@media (min-width: 768px) {
+  .cta-content p {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
 }
 
 .cta-buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
+}
+
+@media (min-width: 768px) {
+  .cta-buttons {
+    gap: 12px;
+  }
 }
 
 .cta-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
+  gap: 6px;
+  padding: 8px 16px;
   border-radius: 50px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .cta-btn {
+    gap: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+  }
 }
 
 .cta-btn-primary {
@@ -292,10 +324,10 @@
     <p>Pesan sekarang dan nikmati kelezatan kue basah segar langsung ke rumahmu</p>
     <div class="cta-buttons">
       <a href="<?php echo base_url('produk'); ?>" class="cta-btn cta-btn-primary">
-        <i class="fas fa-shopping-bag"></i> Pesan Sekarang
+        <i class="fas fa-shopping-bag text-xs md:text-sm"></i> <span class="hidden md:inline">Pesan Sekarang</span><span class="md:hidden">Pesan</span>
       </a>
       <a href="https://wa.me/<?php echo NOMOR_WA_PENJUAL; ?>" target="_blank" class="cta-btn cta-btn-whatsapp">
-        <i class="fab fa-whatsapp"></i> Chat WhatsApp
+        <i class="fab fa-whatsapp text-xs md:text-sm"></i> <span class="hidden md:inline">Chat WhatsApp</span><span class="md:hidden">Chat</span>
       </a>
     </div>
   </div>
@@ -319,7 +351,7 @@
         </div>
       </div>
       
-      <!-- Menu -->
+      <!-- Menu & Jam Buka - sejajar di mobile -->
       <div class="footer-col">
         <h4><i class="fas fa-list"></i> MENU</h4>
         <a href="<?php echo base_url('home'); ?>">Beranda</a>
@@ -328,17 +360,16 @@
         <a href="<?php echo base_url('riwayat'); ?>">Riwayat</a>
       </div>
       
-      <!-- Kontak -->
+      <div class="footer-col">
+        <h4><i class="fas fa-clock"></i> JAM BUKA</h4>
+        <span class="hours-chip"><i class="fas fa-check-circle"></i> Setiap Hari 05.00 - 12.00</span>
+      </div>
+      
+      <!-- Kontak - full width di mobile -->
       <div class="footer-col">
         <h4><i class="fas fa-map-marker-alt"></i> KONTAK</h4>
         <p>Gbi, Komp, Jl. Alam Raya No.4, RW.5, Buahbatu, Kec. Bojongsoang, Kabupaten Bandung, Jawa Barat 40287</p>
         <p>0821-1976-4204</p>
-      </div>
-      
-      <!-- Jam Buka -->
-      <div class="footer-col">
-        <h4><i class="fas fa-clock"></i> JAM BUKA</h4>
-        <span class="hours-chip"><i class="fas fa-check-circle"></i> Setiap Hari 05.00 - 12.00</span>
       </div>
     </div>
     

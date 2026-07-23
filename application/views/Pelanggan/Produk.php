@@ -71,41 +71,41 @@
 
         <?php else: ?>
 
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 product-grid">
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 product-grid">
 
                 <?php foreach($produk as $p): ?>
 
                     <div class="bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-200 flex flex-col h-full">
 
-                        <div class="product-card-image-wrapper bg-gradient-to-br from-primary/10 to-background">
+                        <div class="product-card-image-wrapper bg-gradient-to-br from-primary/10 to-background aspect-square">
 
                             <?php if($p->gambar && file_exists(FCPATH . 'assets/upload/'.$p->gambar)): ?>
                                 <a href="<?php echo base_url('produk/detail/'.$p->id_produk); ?>" class="block w-full h-full">
                                     <img src="<?php echo base_url('assets/upload/'.$p->gambar); ?>"
                                          alt="<?php echo $p->nama_produk; ?>"
-                                         class="product-card-image hover:opacity-95 transition-opacity duration-200">
+                                         class="w-full h-full object-cover hover:opacity-95 transition-opacity duration-200">
                                 </a>
                             <?php else: ?>
-                                <i class="fas fa-cookie-bite text-6xl text-primary/15"></i>
+                                <i class="fas fa-cookie-bite text-5xl text-primary/15"></i>
                             <?php endif; ?>
 
                         </div>
 
-                        <div class="p-6 flex flex-col flex-grow">
-                            <h3 class="font-bold text-text-main mb-1 cursor-pointer hover:text-primary transition-colors duration-200">
+                        <div class="p-2 md:p-4 flex flex-col flex-grow">
+                            <h3 class="font-bold text-text-main mb-1 cursor-pointer hover:text-primary transition-colors duration-200 text-sm md:text-base">
                                 <a href="<?php echo base_url('produk/detail/'.$p->id_produk); ?>" class="block">
                                     <?php echo $p->nama_produk; ?>
                                 </a>
                             </h3>
 
-                            <p class="text-sm text-text-muted mb-3">
+                            <p class="text-xs md:text-sm text-text-muted mb-3">
                                 Rasa <?php echo $p->rasa; ?>
                                 •
                                 Stok <?php echo $p->stok; ?>
                             </p>
 
                             <div class="flex items-center justify-between mb-3">
-                                <span class="text-primary font-bold text-lg">
+                                <span class="text-primary font-bold text-sm md:text-lg">
                                     Rp <?php echo number_format($p->harga,0,',','.'); ?>
                                 </span>
 
@@ -126,18 +126,18 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-col gap-3 mt-auto">
+                            <div class="flex flex-col gap-2 md:gap-3 mt-auto">
                                 <a href="<?php echo base_url('produk/detail/'.$p->id_produk); ?>"
-                                   class="w-full h-10 inline-flex items-center justify-center rounded-full bg-surface border border-primary text-primary text-sm font-semibold hover:bg-primary hover:text-white transition-all duration-200">
+                                   class="w-full h-8 md:h-10 inline-flex items-center justify-center rounded-full bg-surface border border-primary text-primary text-xs md:text-sm font-semibold hover:bg-primary hover:text-white transition-all duration-200">
                                     Lihat Detail
                                 </a>
 
                                 <!-- Tombol Tambah ke Keranjang -->
                                 <button type="button"
-                                        class="btnAddCart w-full h-10 px-4 bg-primary text-white rounded-full text-sm font-semibold hover:bg-primary-hover transition-all duration-200 flex items-center justify-center gap-2 shadow-md shadow-primary/20"
+                                        class="btnAddCart w-full h-8 md:h-10 px-2 md:px-4 bg-primary text-white rounded-full text-xs md:text-sm font-semibold hover:bg-primary-hover transition-all duration-200 flex items-center justify-center gap-1 md:gap-2 shadow-md shadow-primary/20"
                                         data-id="<?php echo $p->id_produk; ?>"
                                         data-stok="<?php echo $p->stok; ?>">
-                                    <i class="fas fa-cart-plus text-xs"></i> Tambah ke Keranjang
+                                    <i class="fas fa-cart-plus text-[10px] md:text-xs"></i> <span class="hidden md:inline">Tambah ke Keranjang</span><span class="md:hidden">Tambah</span>
                                 </button>
                             </div>
                         </div>
@@ -277,7 +277,7 @@
             })
             .finally(() => {
                 this.disabled = false;
-                this.innerHTML = '<i class="fas fa-cart-plus text-xs"></i> Tambah ke Keranjang';
+                this.innerHTML = '<i class="fas fa-cart-plus text-[10px] md:text-xs"></i> <span class="hidden md:inline">Tambah ke Keranjang</span><span class="md:hidden">Tambah</span>';
             });
         });
     });

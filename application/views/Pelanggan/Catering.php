@@ -25,61 +25,48 @@
         </div>
 
         <?php if(!empty($paket)): ?>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
             <?php foreach($paket as $p): ?>
             <div class="group">
-                <div class="bg-surface rounded-3xl border border-border-subtle/20 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-primary/15 transition-all duration-200 hover:-translate-y-1">
+                <div class="bg-surface rounded-2xl sm:rounded-3xl border border-border-subtle/20 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-primary/15 transition-all duration-200 hover:-translate-y-1">
                     <!-- Foto -->
-                    <div class="relative h-52 overflow-hidden bg-gradient-to-br from-background to-primary/10">
+                    <div class="relative aspect-square sm:h-52 overflow-hidden bg-gradient-to-br from-background to-primary/10">
                         <?php if($p->foto && $p->foto != 'default.jpg' && file_exists(FCPATH . 'assets/upload/'.$p->foto)): ?>
                             <img src="<?php echo base_url('assets/upload/'.$p->foto); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <?php else: ?>
                             <div class="w-full h-full flex items-center justify-center">
                                 <div class="text-center">
-                                    <i class="fas fa-box-open text-5xl text-primary/20"></i>
-                                    <p class="text-xs text-primary/30 mt-2"><?php echo $p->nama_paket; ?></p>
+                                    <i class="fas fa-box-open text-3xl sm:text-5xl text-primary/20"></i>
+                                    <p class="text-[10px] sm:text-xs text-primary/30 mt-1 sm:mt-2"><?php echo $p->nama_paket; ?></p>
                                 </div>
                             </div>
                         <?php endif; ?>
                         <!-- Badge porsi -->
-                        <div class="absolute top-3 right-3 bg-surface/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-primary shadow-sm border border-border-subtle/20">
-                            <i class="fas fa-users mr-1"></i> <?php echo $p->porsi; ?> porsi
+                        <div class="absolute top-2 right-2 sm:top-3 sm:right-3 bg-surface/90 backdrop-blur-sm px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold text-primary shadow-sm border border-border-subtle/20">
+                            <i class="fas fa-users mr-0.5 sm:mr-1"></i> <?php echo $p->porsi; ?> porsi
                         </div>
                     </div>
 
                     <!-- Konten -->
-                    <div class="p-6">
-                        <h3 class="font-bold text-lg text-text-main mb-2 font-heading"><?php echo $p->nama_paket; ?></h3>
+                    <div class="p-2 sm:p-4">
+                        <h3 class="font-semibold text-sm sm:text-lg text-text-main mb-1 sm:mb-2 font-heading"><?php echo $p->nama_paket; ?></h3>
 
                         <!-- Isi Paket -->
-                        <div class="mb-4">
-                            <p class="text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Isi Paket</p>
-                            <div class="flex flex-wrap gap-1.5">
-                                <?php
-                                $isi_arr = explode('+', $p->isi_paket);
-                                foreach($isi_arr as $isi_item):
-                                    $item = trim($isi_item);
-                                    if($item):
-                                ?>
-                                <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-background rounded-lg text-xs text-text-muted font-medium border border-border-subtle/20">
-                                    <i class="fas fa-check-circle text-green-500 text-[10px]"></i>
-                                    <?php echo $item; ?>
-                                </span>
-                                <?php
-                                    endif;
-                                endforeach;
-                                ?>
-                            </div>
+                        <div class="mb-2 sm:mb-4">
+                            <p class="text-[10px] sm:text-xs font-semibold text-text-muted uppercase tracking-wider mb-0.5 sm:mb-1.5">Isi Paket</p>
+                            <p class="text-[10px] sm:text-xs text-text-muted line-clamp-2">
+                                <?php echo str_replace('+', ', ', $p->isi_paket); ?>
+                            </p>
                         </div>
 
                         <!-- Harga -->
-                        <div class="flex items-center justify-between pt-3 border-t border-border-subtle/20">
+                        <div class="flex items-center justify-between pt-2 sm:pt-3 border-t border-border-subtle/20">
                             <div>
-                                <p class="text-xs text-text-subtle">Harga per paket</p>
-                                <p class="font-extrabold text-xl text-primary">Rp <?php echo number_format($p->harga, 0, ',', '.'); ?></p>
+                                <p class="text-[10px] sm:text-xs text-text-subtle">Harga per paket</p>
+                                <p class="font-extrabold text-sm sm:text-xl text-primary">Rp <?php echo number_format($p->harga, 0, ',', '.'); ?></p>
                             </div>
-                            <a href="<?php echo base_url('catering_kustom/index/'.$p->id); ?>" class="px-4 py-2.5 bg-primary text-white rounded-full font-semibold text-sm hover:bg-primary-hover transition-all duration-200 hover:scale-[1.02] flex items-center gap-1.5 shadow-md shadow-primary/20">
-                                <i class="fas fa-pen text-xs"></i> Kustomisasi Paket
+                            <a href="<?php echo base_url('catering_kustom/index/'.$p->id); ?>" class="px-2 py-1 sm:px-4 sm:py-2.5 bg-primary text-white rounded-full font-semibold text-[10px] sm:text-sm hover:bg-primary-hover transition-all duration-200 hover:scale-[1.02] flex items-center gap-0.5 sm:gap-1.5 shadow-md shadow-primary/20">
+                                <i class="fas fa-pen text-[10px] sm:text-xs"></i> <span class="hidden sm:inline">Kustomisasi Paket</span><span class="sm:hidden">Kustom</span>
                             </a>
                         </div>
                     </div>

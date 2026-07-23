@@ -29,64 +29,64 @@
             </p>
         </div>
 
-        <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+        <div class="mt-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 relative z-10">
             <!-- Beli Satuan -->
-            <a href="<?php echo base_url('produk'); ?>" class="group bg-surface/80 backdrop-blur-sm rounded-3xl p-6 border border-border-subtle/20 shadow-sm hover:shadow-xl transition-all duration-200 card-hover">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center text-white mb-4 shadow-lg shadow-primary/20">
-                    <i class="fas fa-shopping-bag text-xl"></i>
+            <a href="<?php echo base_url('produk'); ?>" class="group bg-surface/80 backdrop-blur-sm rounded-2xl p-4 sm:rounded-3xl sm:p-6 border border-border-subtle/20 shadow-sm hover:shadow-xl transition-all duration-200 card-hover">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center text-white mb-3 sm:mb-4 shadow-md sm:shadow-lg shadow-primary/20">
+                    <i class="fas fa-shopping-bag text-lg sm:text-xl"></i>
                 </div>
-                <h3 class="text-lg font-bold text-text-main mb-2 font-heading">Beli Satuan</h3>
-                <p class="text-sm text-text-muted leading-relaxed">
+                <h3 class="text-base sm:text-lg font-bold text-text-main mb-1 sm:mb-2 font-heading">Beli Satuan</h3>
+                <p class="text-xs sm:text-sm text-text-muted leading-snug sm:leading-relaxed line-clamp-3">
                     Produk reguler yang bisa dibeli satuan. Tambahkan ke keranjang belanja.
                 </p>
-                <div class="mt-5 flex items-center gap-2 text-primary font-semibold group-hover:translate-x-1 transition-transform duration-200">
+                <div class="mt-3 sm:mt-5 flex items-center gap-1 sm:gap-2 text-primary font-semibold group-hover:translate-x-1 transition-transform duration-200 text-sm sm:text-base">
                     Pilih
-                    <i class="fas fa-arrow-right text-sm"></i>
+                    <i class="fas fa-arrow-right text-xs sm:text-sm"></i>
                 </div>
             </a>
 
             <!-- Snack Box -->
-            <a href="<?php echo base_url('pesanan/snack_box_builder'); ?>" class="group bg-surface/80 backdrop-blur-sm rounded-3xl p-6 border border-border-subtle/20 shadow-sm hover:shadow-xl transition-all duration-200 card-hover">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-secondary to-secondary-light flex items-center justify-center text-white mb-4 shadow-lg shadow-secondary/20">
-                    <i class="fas fa-box-open text-xl"></i>
+            <a href="<?php echo base_url('pesanan/snack_box_builder'); ?>" class="group bg-surface/80 backdrop-blur-sm rounded-2xl p-4 sm:rounded-3xl sm:p-6 border border-border-subtle/20 shadow-sm hover:shadow-xl transition-all duration-200 card-hover">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-secondary to-secondary-light flex items-center justify-center text-white mb-3 sm:mb-4 shadow-md sm:shadow-lg shadow-secondary/20">
+                    <i class="fas fa-box-open text-lg sm:text-xl"></i>
                 </div>
-                <h3 class="text-lg font-bold text-text-main mb-2 font-heading">Snack Box</h3>
-                <p class="text-sm text-text-muted leading-relaxed">
+                <h3 class="text-base sm:text-lg font-bold text-text-main mb-1 sm:mb-2 font-heading">Snack Box</h3>
+                <p class="text-xs sm:text-sm text-text-muted leading-snug sm:leading-relaxed line-clamp-3">
                     Paket snack box. Susun isi box sesuai pilihanmu di builder.
                 </p>
-                <div class="mt-5 flex items-center gap-2 text-primary font-semibold group-hover:translate-x-1 transition-transform duration-200">
+                <div class="mt-3 sm:mt-5 flex items-center gap-1 sm:gap-2 text-primary font-semibold group-hover:translate-x-1 transition-transform duration-200 text-sm sm:text-base">
                     Pilih
-                    <i class="fas fa-arrow-right text-sm"></i>
+                    <i class="fas fa-arrow-right text-xs sm:text-sm"></i>
                 </div>
             </a>
 
             <!-- Catering -->
-            <a href="<?php echo base_url('catering'); ?>" class="group bg-surface/80 backdrop-blur-sm rounded-3xl p-6 border border-border-subtle/20 shadow-sm hover:shadow-xl transition-all duration-200 card-hover">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-green-400 flex items-center justify-center text-white mb-4 shadow-lg shadow-green-500/20">
-                    <i class="fas fa-people-group text-xl"></i>
+            <a href="<?php echo base_url('catering'); ?>" class="group bg-surface/80 backdrop-blur-sm rounded-2xl p-4 sm:rounded-3xl sm:p-6 border border-border-subtle/20 shadow-sm hover:shadow-xl transition-all duration-200 card-hover">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-green-500 to-green-400 flex items-center justify-center text-white mb-3 sm:mb-4 shadow-md sm:shadow-lg shadow-green-500/20">
+                    <i class="fas fa-people-group text-lg sm:text-xl"></i>
                 </div>
-                <h3 class="text-lg font-bold text-text-main mb-2 font-heading">Catering</h3>
-                <p class="text-sm text-text-muted leading-relaxed">
+                <h3 class="text-base sm:text-lg font-bold text-text-main mb-1 sm:mb-2 font-heading">Catering</h3>
+                <p class="text-xs sm:text-sm text-text-muted leading-snug sm:leading-relaxed line-clamp-3">
                     Paket catering. Pilih jumlah porsi dan tanggal pemesanan.
                 </p>
-                <div class="mt-5 flex items-center gap-2 text-primary font-semibold group-hover:translate-x-1 transition-transform duration-200">
+                <div class="mt-3 sm:mt-5 flex items-center gap-1 sm:gap-2 text-primary font-semibold group-hover:translate-x-1 transition-transform duration-200 text-sm sm:text-base">
                     Pilih
-                    <i class="fas fa-arrow-right text-sm"></i>
+                    <i class="fas fa-arrow-right text-xs sm:text-sm"></i>
                 </div>
             </a>
 
             <!-- Nyiru / Tampah -->
-            <a href="<?php echo base_url('nyiru'); ?>" class="group bg-surface/80 backdrop-blur-sm rounded-3xl p-6 border border-border-subtle/20 shadow-sm hover:shadow-xl transition-all duration-200 card-hover">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/80 to-primary flex items-center justify-center text-white mb-4 shadow-lg shadow-primary/20">
-                    <i class="fas fa-bowl-food text-xl"></i>
+            <a href="<?php echo base_url('nyiru'); ?>" class="group bg-surface/80 backdrop-blur-sm rounded-2xl p-4 sm:rounded-3xl sm:p-6 border border-border-subtle/20 shadow-sm hover:shadow-xl transition-all duration-200 card-hover">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/80 to-primary flex items-center justify-center text-white mb-3 sm:mb-4 shadow-md sm:shadow-lg shadow-primary/20">
+                    <i class="fas fa-bowl-food text-lg sm:text-xl"></i>
                 </div>
-                <h3 class="text-lg font-bold text-text-main mb-2 font-heading">Nyiru / Tampah</h3>
-                <p class="text-sm text-text-muted leading-relaxed">
+                <h3 class="text-base sm:text-lg font-bold text-text-main mb-1 sm:mb-2 font-heading">Nyiru / Tampah</h3>
+                <p class="text-xs sm:text-sm text-text-muted leading-snug sm:leading-relaxed line-clamp-3">
                     Paket untuk acara. Pilih ukuran, jumlah, dan tanggal acara.
                 </p>
-                <div class="mt-5 flex items-center gap-2 text-primary font-semibold group-hover:translate-x-1 transition-transform duration-200">
+                <div class="mt-3 sm:mt-5 flex items-center gap-1 sm:gap-2 text-primary font-semibold group-hover:translate-x-1 transition-transform duration-200 text-sm sm:text-base">
                     Pilih
-                    <i class="fas fa-arrow-right text-sm"></i>
+                    <i class="fas fa-arrow-right text-xs sm:text-sm"></i>
                 </div>
             </a>
         </div>

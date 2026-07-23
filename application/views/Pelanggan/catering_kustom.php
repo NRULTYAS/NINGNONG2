@@ -23,21 +23,23 @@
             <p class="text-text-muted max-w-xl mx-auto">Sesuaikan menu sesuai keinginan Anda.</p>
         </div>
 
-        <!-- Budget Info -->
-        <div class="max-w-3xl mx-auto mb-8">
-            <div class="bg-surface rounded-2xl border border-border-subtle/20 shadow-sm p-4 sm:p-6">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-                    <div class="p-3 bg-background rounded-xl">
-                        <p class="text-xs text-text-subtle font-medium uppercase tracking-wider">Harga Paket Dasar</p>
-                        <p class="text-xl font-extrabold text-primary" id="harga-paket">Rp <?php echo number_format($paket->harga, 0, ',', '.'); ?></p>
+        <!-- Budget Info (Mobile: compact, Desktop: full) -->
+        <div class="max-w-3xl mx-auto mb-6">
+            <div class="bg-surface rounded-2xl border border-border-subtle/20 shadow-sm p-2 sm:p-4">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4 text-center sm:text-left">
+                    <div class="flex-1">
+                        <p class="text-[10px] sm:text-xs text-text-subtle font-medium uppercase">Harga Paket Dasar</p>
+                        <p class="text-sm sm:text-lg font-extrabold text-primary" id="harga-paket">Rp <?php echo number_format($paket->harga, 0, ',', '.'); ?></p>
                     </div>
-                    <div class="p-3 bg-background rounded-xl">
-                        <p class="text-xs text-text-subtle font-medium uppercase tracking-wider">Biaya Tambahan</p>
-                        <p class="text-xl font-extrabold text-primary" id="biaya-tambahan">Rp 0</p>
+                    <div class="w-px h-4 sm:h-8 bg-border-subtle/30 sm:block hidden"></div>
+                    <div class="flex-1">
+                        <p class="text-[10px] sm:text-xs text-text-subtle font-medium uppercase">Biaya Tambahan</p>
+                        <p class="text-sm sm:text-lg font-extrabold text-primary" id="biaya-tambahan">Rp 0</p>
                     </div>
-                    <div class="p-3 bg-background rounded-xl">
-                        <p class="text-xs text-text-subtle font-medium uppercase tracking-wider">Total Pesanan</p>
-                        <p class="text-xl font-extrabold text-primary" id="total-pesanan">Rp <?php echo number_format($paket->harga, 0, ',', '.'); ?></p>
+                    <div class="w-px h-4 sm:h-8 bg-border-subtle/30 sm:block hidden"></div>
+                    <div class="flex-1">
+                        <p class="text-[10px] sm:text-xs text-text-subtle font-medium uppercase">Total Pesanan</p>
+                        <p class="text-sm sm:text-lg font-extrabold text-primary" id="total-pesanan">Rp <?php echo number_format($paket->harga, 0, ',', '.'); ?></p>
                     </div>
                 </div>
             </div>
@@ -64,23 +66,23 @@
                         <span class="text-xs text-text-subtle ml-auto">Pilih 1 item</span>
                     </div>
                 </div>
-                <div class="p-5">
-                    <div class="grid sm:grid-cols-2 xl:grid-cols-2 gap-5">
+                <div class="p-3 sm:p-5">
+                    <div class="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-2 gap-2 sm:gap-3">
                         <?php foreach ($items as $item):
                             $is_default = $item->is_default == 1;
                         ?>
-                        <label class="item-option relative block cursor-pointer <?php echo $is_default ? 'ring-2 ring-accent' : ''; ?> bg-surface border <?php echo $is_default ? 'border-accent' : 'border-border-subtle/30'; ?> rounded-2xl p-4 shadow-sm card-hover" data-harga="<?php echo $item->harga; ?>" data-kategori="<?php echo $kategori; ?>">
+                        <label class="item-option relative block cursor-pointer <?php echo $is_default ? 'ring-2 ring-accent' : ''; ?> bg-surface border <?php echo $is_default ? 'border-accent' : 'border-border-subtle/30'; ?> rounded-xl sm:rounded-2xl p-2 sm:p-3 shadow-sm card-hover" data-harga="<?php echo $item->harga; ?>" data-kategori="<?php echo $kategori; ?>">
                             <input type="radio" name="selected_items[<?php echo $kategori; ?>]" value="<?php echo $item->id; ?>" class="hidden item-radio" <?php echo $is_default ? 'checked' : ''; ?> data-harga="<?php echo $item->harga; ?>">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/10 to-background flex items-center justify-center flex-shrink-0 border border-border-subtle/20">
-                                    <i class="fas fa-utensils text-primary/50"></i>
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-primary/10 to-background flex items-center justify-center flex-shrink-0 border border-border-subtle/20">
+                                    <i class="fas fa-utensils text-primary/50 text-xs sm:text-sm"></i>
                                 </div>
-                                <div class="flex-1">
-                                    <h3 class="font-bold text-text-main text-sm"><?php echo $item->nama_item; ?></h3>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="font-semibold text-text-main text-xs sm:text-sm line-clamp-1"><?php echo $item->nama_item; ?></h3>
                                     <?php if ($item->harga > 0): ?>
-                                    <p class="text-xs text-primary font-medium mt-1">+ Rp <?php echo number_format($item->harga, 0, ',', '.'); ?></p>
+                                    <p class="text-[10px] sm:text-xs text-primary font-medium">+ Rp <?php echo number_format($item->harga, 0, ',', '.'); ?></p>
                                     <?php else: ?>
-                                    <p class="text-xs text-green-600 font-medium mt-1">✓ Termasuk paket</p>
+                                    <p class="text-[10px] sm:text-xs text-green-600 font-medium">✓ Termasuk</p>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -92,14 +94,14 @@
             <?php endforeach; ?>
         </div>
 
-        <!-- Tombol Submit -->
-        <div class="max-w-7xl mx-auto mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 p-5 bg-surface rounded-2xl border border-border-subtle/20 shadow-sm">
+        <!-- Mobile Bottom Bar (Total + Checkout) -->
+        <div id="mobileBottomBar" class="fixed bottom-0 left-0 right-0 bg-white border-t border-border-subtle/30 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] p-3 flex items-center justify-between z-50 md:hidden">
             <div>
-                <p class="text-xs text-text-subtle">Total Pesanan</p>
-                <p class="text-2xl font-extrabold text-primary" id="total-footer">Rp <?php echo number_format($paket->harga, 0, ',', '.'); ?></p>
+                <p class="text-[10px] text-text-subtle">Total Pesanan</p>
+                <p class="font-extrabold text-primary" id="mobile-total">Rp <?php echo number_format($paket->harga, 0, ',', '.'); ?></p>
             </div>
-            <button type="submit" id="btn-lanjut" class="w-full sm:w-auto px-8 py-3 bg-primary text-white rounded-full font-semibold hover:bg-primary-hover transition-all duration-200 hover:scale-[1.02] flex items-center gap-2 shadow-md shadow-primary/20">
-                <i class="fas fa-arrow-right text-sm"></i> Lanjut ke Pembayaran
+            <button type="submit" id="btn-lanjut-mobile" class="px-4 py-2 bg-primary text-white rounded-lg font-semibold text-sm hover:bg-primary-hover transition">
+                Checkout
             </button>
         </div>
 
@@ -133,7 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('biaya-tambahan').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(tambahan);
         document.getElementById('total-pesanan').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
-        document.getElementById('total-footer').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
+        const mobileTotal = document.getElementById('mobile-total');
+        if (mobileTotal) mobileTotal.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
     }
 
     // Update style saat radio berubah

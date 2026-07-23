@@ -132,16 +132,15 @@ $jumlah_keranjang = isset($jumlah_keranjang) ? $jumlah_keranjang : 0;
                         <span class="block text-[10px] text-secondary font-medium -mt-0.5 tracking-wider">KUE BASAH</span>
                     </div>
                 </a>
-                <!-- Mobile menu button -->
-                <button id="hamburgerBtn" class="md:hidden p-2 text-text-muted hover:text-primary transition-colors duration-200 rounded-xl hover:bg-secondary-light focus:outline-none" aria-label="Menu">
-                    <i class="fas fa-bars text-lg" id="hamburgerIcon"></i>
-                </button>
-
                 <div class="hidden md:flex items-center gap-8">
                     <a href="<?php echo base_url('home'); ?>" class="nav-link text-text-muted hover:text-primary font-medium transition-colors duration-200 text-sm">Beranda</a>
                     <a href="<?php echo base_url('produk'); ?>" class="nav-link text-text-muted hover:text-primary font-medium transition-colors duration-200 text-sm">Aneka Kue</a>
                 </div>
                 <div class="flex items-center gap-3">
+                    <!-- Mobile menu button (gabung dengan grup kanan) -->
+                    <button id="hamburgerBtn" class="md:hidden p-2 text-text-muted hover:text-primary transition-colors duration-200 rounded-xl hover:bg-secondary-light focus:outline-none" aria-label="Menu">
+                        <i class="fas fa-bars text-lg" id="hamburgerIcon"></i>
+                    </button>
                     <?php if($id_user && $role != 'admin'): ?>
                     <a href="<?php echo base_url('keranjang'); ?>" class="relative p-2.5 text-text-muted hover:text-primary transition-colors duration-200 rounded-xl hover:bg-secondary-light">
                         <i class="fas fa-shopping-bag text-lg"></i>
@@ -213,8 +212,8 @@ $jumlah_keranjang = isset($jumlah_keranjang) ? $jumlah_keranjang : 0;
                     })();
                     </script>
                     <?php else: ?>
-                    <a href="<?php echo base_url('auth/login'); ?>" class="px-5 py-2 text-primary font-medium hover:bg-secondary-light rounded-xl transition-colors duration-200 text-sm">Masuk</a>
-                    <a href="<?php echo base_url('auth/register'); ?>" class="px-5 py-2 bg-primary text-white font-medium rounded-full hover:bg-primary-hover transition-all duration-200 shadow-md shadow-primary/20 text-sm">Daftar</a>
+                    <a href="<?php echo base_url('auth/login'); ?>" class="text-xs text-primary font-medium hover:bg-secondary-light rounded-xl transition-colors duration-200 px-2.5 py-1">Masuk</a>
+                    <a href="<?php echo base_url('auth/register'); ?>" class="text-xs px-3 py-1.5 bg-primary text-white font-medium rounded-full hover:bg-primary-hover transition-all duration-200 shadow-md shadow-primary/20">Daftar</a>
                     <?php endif; ?>
                 </div>
             </div>

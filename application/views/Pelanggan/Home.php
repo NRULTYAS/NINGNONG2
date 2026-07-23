@@ -22,42 +22,41 @@
                     <span class="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent"> Asli Indonesia</span>
                 </h1>
                 <p class="text-text-muted text-lg mb-8 leading-relaxed max-w-lg">Dibuat dengan resep turun-temurun menggunakan bahan-bahan pilihan berkualitas tinggi. Rasakan kelezatan yang tak terlupakan.</p>
-                <div class="flex flex-wrap gap-4">
+                <div class="flex flex-row gap-3">
                     <?php
                         $id_user = $this->session->userdata('id_user');
                         $role = $this->session->userdata('role');
 
                         if (empty($id_user) || empty($role)) {
                     ?>
-                        <a href="<?php echo base_url('produk'); ?>" class="group px-8 py-3.5 bg-gradient-to-r from-primary to-primary-hover text-white rounded-full font-medium hover:shadow-xl hover:shadow-primary/25 transition-all duration-200 flex items-center gap-2 shadow-md shadow-primary/20">
-                            Lihat Produk <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                        <a href="<?php echo base_url('produk'); ?>" class="px-5 py-2.5 bg-gradient-to-r from-primary to-primary-hover text-white rounded-full font-medium hover:shadow-xl hover:shadow-primary/25 transition-all duration-200 flex items-center gap-2 shadow-md shadow-primary/20 text-sm">
+                            <i class="fas fa-shopping-bag text-sm"></i> Lihat Produk
                         </a>
-                        <a href="<?php echo base_url('auth/register'); ?>" class="px-8 py-3.5 border-2 border-primary/30 text-primary rounded-full font-medium hover:bg-primary hover:text-white hover:border-primary transition-all duration-200">Daftar Sekarang</a>
-                        <a href="<?php echo base_url('auth/login'); ?>" class="px-8 py-3.5 border-2 border-primary/30 text-primary rounded-full font-medium hover:bg-primary hover:text-white hover:border-primary transition-all duration-200">Masuk</a>
+                        <a href="<?php echo base_url('auth/register'); ?>" class="px-5 py-2.5 border-2 border-primary/30 text-primary rounded-full font-medium hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 text-sm">Daftar Sekarang</a>
                     <?php
                         } elseif ($role === 'pelanggan') {
                     ?>
-                        <a href="<?php echo base_url('pesanan/pilih_jenis'); ?>" class="group px-8 py-3.5 bg-gradient-to-r from-primary to-primary-hover text-white rounded-full font-medium hover:shadow-xl hover:shadow-primary/25 transition-all duration-200 flex items-center gap-2 shadow-md shadow-primary/20">
-                            Pesan Sekarang <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                        <a href="<?php echo base_url('pesanan/pilih_jenis'); ?>" class="px-5 py-2.5 bg-gradient-to-r from-primary to-primary-hover text-white rounded-full font-medium hover:shadow-xl hover:shadow-primary/25 transition-all duration-200 flex items-center gap-2 shadow-md shadow-primary/20 text-sm">
+                            <i class="fas fa-shopping-bag text-sm"></i> Pesan Sekarang
                         </a>
-                        <a href="https://wa.me/<?php echo NOMOR_WA_PENJUAL; ?>?text=<?php echo urlencode('Halo, saya ingin tanya-tanya tentang produk NINGNONG Kue Basah'); ?>" target="_blank" class="px-8 py-3.5 bg-[#25D366] text-white rounded-full font-medium hover:bg-[#1da851] hover:shadow-lg hover:shadow-black/10 transition-all duration-200 flex items-center gap-2 shadow-md shadow-[#25D366]/30">
+                        <a href="https://wa.me/<?php echo NOMOR_WA_PENJUAL; ?>?text=<?php echo urlencode('Halo, saya ingin tanya-tanya tentang produk NINGNONG Kue Basah'); ?>" target="_blank" class="px-5 py-2.5 bg-[#25D366] text-white rounded-full font-medium hover:bg-[#1da851] hover:shadow-lg hover:shadow-black/10 transition-all duration-200 flex items-center gap-2 shadow-md shadow-[#25D366]/30 text-sm">
                             <i class="fab fa-whatsapp text-sm"></i> Chat WhatsApp
                         </a>
                     <?php
                         } elseif ($role === 'admin') {
                     ?>
-                        <a href="<?php echo base_url('admin/dashboard'); ?>" class="group px-8 py-3.5 bg-gradient-to-r from-primary to-primary-hover text-white rounded-full font-medium hover:shadow-xl hover:shadow-primary/25 transition-all duration-200 flex items-center gap-2 shadow-md shadow-primary/20">
-                            Dashboard Admin <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                        <a href="<?php echo base_url('admin/dashboard'); ?>" class="px-5 py-2.5 bg-gradient-to-r from-primary to-primary-hover text-white rounded-full font-medium hover:shadow-xl hover:shadow-primary/25 transition-all duration-200 flex items-center gap-2 shadow-md shadow-primary/20 text-sm">
+                            <i class="fas fa-tachometer-alt text-sm"></i> Dashboard Admin
                         </a>
-                        <a href="<?php echo base_url('admin/produk'); ?>" class="px-8 py-3.5 border-2 border-primary/30 text-primary rounded-full font-medium hover:bg-primary hover:text-white hover:border-primary transition-all duration-200">Kelola Produk</a>
+                        <a href="<?php echo base_url('admin/produk'); ?>" class="px-5 py-2.5 border-2 border-primary/30 text-primary rounded-full font-medium hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 text-sm">Kelola Produk</a>
                     <?php
                         } else {
                             // fallback jika role tidak dikenali: tampilkan tombol daftar
                     ?>
-                        <a href="<?php echo base_url('produk'); ?>" class="group px-8 py-3.5 bg-gradient-to-r from-primary to-primary-hover text-white rounded-full font-medium hover:shadow-xl hover:shadow-primary/25 transition-all duration-200 flex items-center gap-2 shadow-md shadow-primary/20">
-                            Lihat Produk <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                        <a href="<?php echo base_url('produk'); ?>" class="px-5 py-2.5 bg-gradient-to-r from-primary to-primary-hover text-white rounded-full font-medium hover:shadow-xl hover:shadow-primary/25 transition-all duration-200 flex items-center gap-2 shadow-md shadow-primary/20 text-sm">
+                            <i class="fas fa-shopping-bag text-sm"></i> Lihat Produk
                         </a>
-                        <a href="<?php echo base_url('auth/register'); ?>" class="px-8 py-3.5 border-2 border-primary/30 text-primary rounded-full font-medium hover:bg-primary hover:text-white hover:border-primary transition-all duration-200">Daftar Sekarang</a>
+                        <a href="<?php echo base_url('auth/register'); ?>" class="px-5 py-2.5 border-2 border-primary/30 text-primary rounded-full font-medium hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 text-sm">Daftar Sekarang</a>
                     <?php } ?>
                 </div>
                 <!-- Stats -->
@@ -146,74 +145,77 @@ src="<?php echo base_url('assets/img/images-40-2.jpeg'); ?>"
                 Lihat Semua <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
             </a>
         </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <?php foreach($produk_terbaru as $p): ?>
-            <div class="bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-200 group border border-border-subtle/10 card-hover">
-                <div class="product-card-image-wrapper bg-gradient-to-br from-primary/10 to-background">
-                    <?php if($p->gambar && file_exists(FCPATH . 'assets/upload/'.$p->gambar)): ?>
-                    <img src="<?php echo base_url('assets/upload/'.$p->gambar); ?>" alt="<?php echo $p->nama_produk; ?>" class="product-card-image group-hover:scale-110 transition duration-700">
-                    <?php else: ?>
-                    <i class="fas fa-cookie-bite text-6xl text-primary/15"></i>
-                    <?php endif; ?>
-                    <span class="absolute top-3 left-3 bg-primary/80 backdrop-blur-sm text-white text-[10px] px-3 py-1 rounded-lg font-medium tracking-wide uppercase"><?php echo $p->nama_kategori; ?></span>
-                    <?php if($p->stok <= 5 && $p->stok > 0): ?>
-                    <span class="absolute top-3 right-3 bg-red-500/90 backdrop-blur-sm text-white text-[10px] px-3 py-1 rounded-lg font-medium">Stok Menipis!</span>
-                    <?php endif; ?>
-                    <!-- Quick view overlay -->
-                    <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition duration-300 flex items-center justify-center">
-                        <a href="<?php echo base_url('produk/detail/'.$p->id_produk); ?>" class="w-11 h-11 bg-surface rounded-xl flex items-center justify-center text-primary shadow-lg opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-primary hover:text-white">
-                            <i class="fas fa-eye text-sm"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="font-bold text-text-main mb-1 group-hover:text-primary transition"><?php echo $p->nama_produk; ?></h3>
-                    <p class="text-sm text-text-muted mb-3">Rasa <?php echo $p->rasa; ?></p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-primary font-bold text-lg">Rp <?php echo number_format($p->harga,0,',','.'); ?></span>
-                        <?php if($p->stok > 0): ?>
-                        <span class="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-lg font-medium">Tersedia</span>
-                        <?php else: ?>
-                        <span class="text-xs text-text-subtle bg-background px-2 py-1 rounded-lg font-medium">Habis</span>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-            <?php endforeach; ?>
-        </div>
+<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+             <?php foreach($produk_terbaru as $p): ?>
+             <div class="bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-200 group border border-border-subtle/10 card-hover">
+                 <div class="product-card-image-wrapper bg-gradient-to-br from-primary/10 to-background aspect-square">
+                     <?php if($p->gambar && file_exists(FCPATH . 'assets/upload/'.$p->gambar)): ?>
+                     <img src="<?php echo base_url('assets/upload/'.$p->gambar); ?>" alt="<?php echo $p->nama_produk; ?>" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                     <?php else: ?>
+                     <i class="fas fa-cookie-bite text-5xl text-primary/15"></i>
+                     <?php endif; ?>
+                     <span class="absolute top-2 left-2 bg-primary/80 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-lg font-medium tracking-wide uppercase"><?php echo $p->nama_kategori; ?></span>
+                     <?php if($p->stok <= 5 && $p->stok > 0): ?>
+                     <span class="absolute top-2 right-2 bg-red-500/90 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-lg font-medium">Stok Menipis!</span>
+                     <?php endif; ?>
+                     <!-- Quick view overlay -->
+                     <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition duration-300 flex items-center justify-center">
+                         <a href="<?php echo base_url('produk/detail/'.$p->id_produk); ?>" class="w-8 h-8 md:w-11 md:h-11 bg-surface rounded-xl flex items-center justify-center text-primary shadow-lg opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-primary hover:text-white">
+                             <i class="fas fa-eye text-xs md:text-sm"></i>
+                         </a>
+                     </div>
+                 </div>
+                 <div class="p-2 md:p-4">
+                     <h3 class="font-bold text-text-main mb-1 group-hover:text-primary transition text-sm md:text-base"><?php echo $p->nama_produk; ?></h3>
+                     <p class="text-xs md:text-sm text-text-muted mb-2">Rasa <?php echo $p->rasa; ?></p>
+                     <div class="flex items-center justify-between">
+                         <span class="text-primary font-bold text-sm md:text-lg">Rp <?php echo number_format($p->harga,0,',','.'); ?></span>
+                         <?php if($p->stok > 0): ?>
+                         <span class="text-[10px] md:text-xs text-green-600 bg-green-50 px-1.5 md:px-2 py-0.5 md:py-1 rounded-lg font-medium">Tersedia</span>
+                         <?php else: ?>
+                         <span class="text-[10px] md:text-xs text-text-subtle bg-background px-1.5 md:px-2 py-0.5 md:py-1 rounded-lg font-medium">Habis</span>
+                         <?php endif; ?>
+                     </div>
+                 </div>
+             </div>
+             <?php endforeach; ?>
+         </div>
     </div>
 </section>
 
 <!-- Keunggulan -->
-<section class="py-20 bg-surface relative overflow-hidden">
+<section class="py-10 md:py-20 bg-surface relative overflow-hidden">
     <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-background blob opacity-50"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div class="text-center mb-14">
+        <div class="text-center mb-8 md:mb-14">
             <span class="inline-block px-4 py-1 bg-background text-primary rounded-full text-sm font-medium mb-3">Keunggulan</span>
-            <h2 class="text-3xl md:text-4xl font-bold text-text-main mb-3 font-heading">Mengapa Memilih Kami?</h2>
-            <p class="text-text-muted max-w-md mx-auto">Komitmen kami untuk memberikan yang terbaik</p>
+            <h2 class="text-2xl md:text-3xl font-bold text-text-main mb-2 md:mb-3 font-heading">Mengapa Memilih Kami?</h2>
+            <p class="text-text-muted max-w-md mx-auto text-sm md:text-base">Komitmen kami untuk memberikan yang terbaik</p>
         </div>
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="text-center p-10 bg-gradient-to-br from-background to-surface rounded-3xl border border-border-subtle card-hover group">
-                <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-500 rounded-2xl flex items-center justify-center mx-auto mb-5 text-white shadow-lg shadow-green-500/25 group-hover:shadow-green-500/40 transition duration-200">
-                    <i class="fas fa-leaf text-2xl"></i>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8">
+            <div class="text-center p-4 md:p-10 bg-gradient-to-br from-background to-surface rounded-2xl md:rounded-3xl border border-border-subtle card-hover group">
+                <div class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-green-400 to-green-500 rounded-xl md:rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-5 text-white shadow-md md:shadow-lg shadow-green-500/20 md:shadow-green-500/25 group-hover:shadow-green-500/40 transition duration-200">
+                    <i class="fas fa-leaf text-lg md:text-2xl"></i>
                 </div>
-                <h3 class="font-bold text-xl mb-2 text-text-main font-heading">Bahan Alami</h3>
-                <p class="text-text-muted text-sm leading-relaxed">Hanya menggunakan bahan-bahan alami tanpa pengawet berbahaya untuk keluarga tercinta</p>
+                <h3 class="font-bold text-base md:text-xl mb-1 md:mb-2 text-text-main font-heading">Bahan Alami</h3>
+                <p class="text-xs md:text-sm text-text-muted leading-snug md:leading-relaxed">Hanya menggunakan bahan-bahan alami tanpa pengawet berbahaya untuk keluarga tercinta</p>
             </div>
-            <div class="text-center p-10 bg-gradient-to-br from-background to-surface rounded-3xl border border-border-subtle card-hover group">
-                <div class="w-16 h-16 bg-gradient-to-br from-secondary to-secondary-light rounded-2xl flex items-center justify-center mx-auto mb-5 text-white shadow-lg shadow-secondary/25 group-hover:shadow-secondary/40 transition duration-200">
-                    <i class="fas fa-truck text-2xl"></i>
+            <div class="text-center p-4 md:p-10 bg-gradient-to-br from-background to-surface rounded-2xl md:rounded-3xl border border-border-subtle card-hover group">
+                <div class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-secondary to-secondary-light rounded-xl md:rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-5 text-white shadow-md md:shadow-lg shadow-secondary/20 md:shadow-secondary/25 group-hover:shadow-secondary/40 transition duration-200">
+                    <i class="fas fa-truck text-lg md:text-2xl"></i>
                 </div>
-                <h3 class="font-bold text-xl mb-2 text-text-main font-heading">Pengiriman Cepat</h3>
-                <p class="text-text-muted text-sm leading-relaxed">Pesanan dikirim dalam kondisi terbaik dan tepat waktu langsung ke pintu rumahmu</p>
+                <h3 class="font-bold text-base md:text-xl mb-1 md:mb-2 text-text-main font-heading">Pengiriman Cepat</h3>
+                <p class="text-xs md:text-sm text-text-muted leading-snug md:leading-relaxed">Pesanan dikirim dalam kondisi terbaik dan tepat waktu langsung ke pintu rumahmu</p>
             </div>
-            <div class="text-center p-10 bg-gradient-to-br from-background to-surface rounded-3xl border border-border-subtle card-hover group">
-                <div class="w-16 h-16 bg-gradient-to-br from-primary to-primary-hover rounded-2xl flex items-center justify-center mx-auto mb-5 text-white shadow-lg shadow-primary/25 group-hover:shadow-primary/40 transition duration-200">
-                    <i class="fas fa-heart text-2xl"></i>
+            <!-- Wrapper untuk card ke-3 agar ditengahkan di mobile -->
+            <div class="col-span-2 flex justify-center md:contents">
+                <div class="text-center p-4 md:p-10 bg-gradient-to-br from-background to-surface rounded-2xl md:rounded-3xl border border-border-subtle card-hover group w-full max-w-[calc(50%-0.375rem)] md:w-auto">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-primary to-primary-hover rounded-xl md:rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-5 text-white shadow-md md:shadow-lg shadow-primary/20 md:shadow-primary/25 group-hover:shadow-primary/40 transition duration-200">
+                        <i class="fas fa-heart text-lg md:text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-base md:text-xl mb-1 md:mb-2 text-text-main font-heading">Dibuat dengan Cinta</h3>
+                    <p class="text-xs md:text-sm text-text-muted leading-snug md:leading-relaxed">Setiap kue dibuat dengan penuh perhatian dan cinta menggunakan resep turun-temurun</p>
                 </div>
-                <h3 class="font-bold text-xl mb-2 text-text-main font-heading">Dibuat dengan Cinta</h3>
-                <p class="text-text-muted text-sm leading-relaxed">Setiap kue dibuat dengan penuh perhatian dan cinta menggunakan resep turun-temurun</p>
             </div>
         </div>
     </div>
